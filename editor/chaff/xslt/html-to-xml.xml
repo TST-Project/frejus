@@ -1,0 +1,61 @@
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns="https://ead3.archivists.org/schema/"
+                xmlns:x="http://www.w3.org/1999/xhtml"
+                >
+    <xsl:output method="xml" indent="yes" encoding="utf-8" omit-xml-declaration="yes"/>
+    <xsl:strip-space elements="*"/>
+
+    <xsl:template match="@*|text()|comment()|processing-instruction()">
+        <xsl:copy>
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="x:div">
+        <xsl:apply-templates/>
+    </xsl:template>
+    
+    <xsl:template match="x:div[@class='bibliography']/x:p">
+        <xsl:element name="bibref">
+            <xsl:apply-templates/>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="x:a">
+        <xsl:element name="extref">
+            <xsl:attribute name="actuate">onrequest</xsl:attribute>
+            <xsl:apply-templates/>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="x:p">
+            <xsl:apply-templates/>
+            <xsl:element name="lb"/>
+    </xsl:template>
+    <xsl:template match="x:br">
+            <xsl:element name="lb"/>      
+    </xsl:template>
+    
+    <xsl:template match="x:blockquote">
+        <xsl:element name="blockquote">
+            <xsl:element name="p">
+                <xsl:apply-templates/>
+            </xsl:element>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="x:strong">
+        <xsl:element name="emph">
+            <xsl:attribute name="render">bold</xsl:attribute>
+            <xsl:apply-templates/>
+        </xsl:element>
+    </xsl:template>
+
+   <xsl:template match="x:em">
+        <xsl:element name="emph">
+            <xsl:attribute name="render">italic</xsl:attribute>
+            <xsl:apply-templates/>
+        </xsl:element>
+    </xsl:template>
+
+</xsl:stylesheet>

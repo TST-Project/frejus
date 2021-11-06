@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="tei-to-html.xsl" ?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+   <teiHeader>
+      <fileDesc>
+         <titleStmt>
+            <title></title>
+            <editor><persName/> <orgName/></editor>
+         </titleStmt>
+         <publicationStmt>
+            <publisher>ANF Digital Areal</publisher>
+            <date></date>
+         </publicationStmt>
+         <sourceDesc>
+            <msDesc>
+               <msIdentifier>
+                  <repository>
+                     <orgName></orgName>
+                  </repository>
+                  <idno type="shelfmark"></idno>
+                  <idno type="alternate"></idno>
+               </msIdentifier>
+               <msContents class="">
+                  <summary></summary>
+                  <msItem defective="">
+                     <title xml:lang="tam"></title>
+                     <author xml:lang="tam"></author>
+                     <textLang mainLang=""></textLang>
+                     <filiation>
+                        <p></p>
+                     </filiation>
+                     <rubric xml:lang="tam"></rubric>
+                     <incipit xml:lang="tam"></incipit>
+                     <explicit xml:lang="tam"></explicit>
+                     <finalRubric xml:lang="tam"></finalRubric>
+                     <colophon xml:lang="tam"></colophon>
+                  </msItem>
+               </msContents>
+               <physDesc>
+                  <objectDesc form="">
+                     <supportDesc material="">
+                        <support>
+                           <measure unit="stringhole" quantity=""/>
+                           <p></p>
+                        </support>
+                        <extent>
+                           <measure unit="folio" quantity=""></measure>
+                           <dimensions type="leaf" unit="mm">
+                              <width quantity=""/>
+                              <height quantity=""/>
+                           </dimensions>
+                        </extent>
+                        <collation></collation>
+                        <foliation></foliation>
+                        <condition></condition>
+                     </supportDesc>
+                     <layoutDesc>
+                        <layout columns="" writtenLines=""/>
+                     </layoutDesc>
+                  </objectDesc>
+                  <handDesc><handNote scope="" script=""><desc></desc></handNote></handDesc>
+                  <decoDesc><decoNote type=""><desc></desc></decoNote>
+                  </decoDesc>
+                  <additions>
+                  </additions>
+                  <bindingDesc>
+                     <binding><p></p></binding>
+                  </bindingDesc>
+               </physDesc>
+               <history>
+                  <origin>
+                     <origDate calendar="gregorian" when=""></origDate>
+                     <origPlace></origPlace>
+                  </origin>
+                  <provenance></provenance>
+                  <acquisition></acquisition>
+               </history>
+               <additional>
+                  <listBibl>
+                     <bibl></bibl>
+                  </listBibl>
+               </additional>
+            </msDesc>
+         </sourceDesc>
+      </fileDesc>
+      <encodingDesc>
+         <p></p>
+      </encodingDesc>
+      <revisionDesc>
+         <change when=""></change>
+      </revisionDesc>
+   </teiHeader>
+   <facsimile>
+   </facsimile>
+</TEI>

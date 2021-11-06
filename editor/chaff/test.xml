@@ -1,0 +1,191 @@
+
+<?xml-stylesheet type="text/xsl" href="tei-to-html.xsl" ><div id="recordcontainer">
+   <div id="record-thin">
+      <div id="topbar">
+         <div id="transbutton" title="change script">A</div>
+      </div>
+      <article>
+         <section>
+            <h1></h1>
+            <p></p>
+            <p>Published in <date xmlns="http://www.tei-c.org/ns/1.0"></date> by <publisher xmlns="http://www.tei-c.org/ns/1.0"></publisher>.</p>
+            <table id="msidentifier">
+               <tr>
+                  <td colspan="2">
+                     <span class="orgname"></span>
+                  </td>
+               </tr>
+               <tr>
+                  <th>cote</th>
+                  <td></td>
+               </tr>
+               <tr>
+                  <th>ancienne cote</th>
+                  <td></td>
+               </tr>
+            </table>
+            <section id="summary">
+               <p></p>
+            </section>
+            <section>
+               <h3>Physical description</h3>
+               <table id="physDesc">
+                  <tr>
+                     <th>Format</th>
+                     <td></td>
+                  </tr>
+                  <tr>
+                     <th>Material</th>
+                     <td>.  stringhole. 
+                        </td>
+                  </tr>
+                  <tr>
+                     <th>Extent</th>
+                     <td> folio. </td>
+                  </tr>
+                  <tr>
+                     <th>Dimensions</th>
+                     <td>
+                        <ul>
+                           <li>(leaf) <ul>
+                                 <li>width:  mm</li>
+                                 <li>height:  mm</li>
+                              </ul>
+                           </li>
+                        </ul>
+                     </td>
+                  </tr>
+                  <tr>
+                     <th>Foliation</th>
+                     <td>
+                        <ul>
+                           <li><span class="lihead"></span>: </li>
+                        </ul>
+                     </td>
+                  </tr>
+                  <tr>
+                     <th>Condition</th>
+                     <td></td>
+                  </tr>
+                  <tr>
+                     <th>Layout</th>
+                     <td>
+                        <ul>
+                           <li> written lines per page. </li>
+                        </ul>
+                     </td>
+                  </tr>
+                  <tr>
+                     <th>Scribal Hands</th>
+                     <td>
+                        <ul>
+                           <li><span class="lihead"></span>: ()  script.
+                        <ul>
+                                 <li></li>
+                              </ul>
+                           </li>
+                        </ul>
+                     </td>
+                  </tr>
+                  <tr>
+                     <th>Additions</th>
+                     <td>
+                        <p></p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <th>Binding</th>
+                     <td>
+                        <p>
+                     </p>
+                     </td>
+                  </tr>
+               </table>
+            </section>
+            <section>
+               <h3>Contents</h3>
+               <table class="msItem">
+                  <thead>
+                     <tr>
+                        <th></th>
+                     </tr>
+                  </thead>
+                  <tr>
+                     <th>Title</th>
+                     <td></td>
+                  </tr>
+                  <tr>
+                     <th>Author</th>
+                     <td></td>
+                  </tr>
+                  <tr>
+                     <th>Language</th>
+                     <td></td>
+                  </tr>
+                  <tr>
+                     <th>Filiation</th>
+                     <td>
+                        <p></p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <th>Rubric</th>
+                     <td class="excerpt"></td>
+                  </tr>
+                  <tr>
+                     <th>Incipit</th>
+                     <td class="excerpt"></td>
+                  </tr>
+                  <tr>
+                     <th>Explicit</th>
+                     <td class="excerpt"></td>
+                  </tr>
+                  <tr>
+                     <th>Colophon</th>
+                     <td class="excerpt"></td>
+                  </tr>
+               </table>
+            </section>
+            <section>
+               <h3>History</h3>
+               <table id="history">
+                  <tr>
+                     <th>Date of production</th>
+                     <td>
+                        <origDate xmlns="http://www.tei-c.org/ns/1.0" calendar="gregorian" when=""></origDate>
+                     </td>
+                  </tr>
+                  <tr>
+                     <th>Place of origin</th>
+                     <td>
+                        <origPlace xmlns="http://www.tei-c.org/ns/1.0"></origPlace>
+                     </td>
+                  </tr>
+                  <tr>
+                     <th>Acquisition</th>
+                     <td>
+                        <acquisition xmlns="http://www.tei-c.org/ns/1.0">
+                           <p xmlns=""></p>
+                        </acquisition>
+                     </td>
+                  </tr>
+               </table>
+            </section>
+            <h3>Bibliography</h3>
+            <p class="bibliography"></p>
+            <h3>Encoding conventions</h3>
+            <p></p>
+            <section>
+               <h3>Revision history</h3>
+               <table>
+                  <tr>
+                     <th class="when"></th>
+                     <td></td>
+                  </tr>
+               </table>
+            </section>
+         </section>
+      </article>
+   </div>
+</div>
+<div id="viewer" data-manifest=""></div>

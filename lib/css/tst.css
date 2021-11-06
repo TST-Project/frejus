@@ -1,0 +1,306 @@
+body {
+    /*
+    font-family: 'Brill', serif;
+    color: black;
+    max-width: 800px;
+    margin: 0 auto;
+    padding-top: 20px;
+    font-size: 1.5em;
+    line-height: 1;
+    */
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 0;
+    margin: 0;
+    max-width: 100vw;
+    width: 100vw;
+    height: 100vh;
+    }
+
+@media (width < 600px) {
+    body {
+        flex-direction: column;
+    }
+}
+
+#recordcontainer, .recordcontainer {
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 100%;
+    padding-left: 0;
+    flex: 50%;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#record-thin, .record-thin {
+    position: relative;
+    padding-left: 12.5%;
+    /*width: 120%;*/
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+#record-fat, .record-fat {
+    position: relative;
+    /*padding-left: 12.5%;*/
+    width: 87.5%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#record-thin h1, .record-thin h1 {
+    /*max-width: 55%;
+    /*max-width: 550px;
+    width: 87.5%;*/
+}
+
+#viewer {
+    position: relative;
+    flex: 50%;
+    min-width: 50vw;
+    max-width: 100vw;
+    height: 100vh;
+    border: 0;
+}
+
+#viewer .fullscreen {
+    position: relative;
+    height: 100%;
+}
+
+#topbar {
+    position: sticky;
+    height: 0;
+    top: 1em;
+    left: 1em;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+}
+
+#transbutton {
+    position: absolute;
+    top: 0;
+    left: -3.5rem;
+    border: 1px solid black;
+    padding: 0.1rem 0.5rem 0.1rem 0.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+@media (width < 800px) {
+    #transbutton {
+        left: -12.5%;
+    }
+}
+
+#transbutton.tamil, #transbutton.grantha {
+    padding: 0 0.4rem 0.1rem 0.5rem;
+    font-size: 1rem;
+}
+
+#transbutton.devanagari {
+    padding: 0 0.5rem 0 0.4rem;
+    font-size: 1.4rem;
+}
+
+#transbutton.telugu {
+    padding: 0 0.6rem 0 0.6rem;
+    font-size: 1.1rem;
+}
+
+#transbutton:hover {
+    background: #ff9900;
+}
+
+.line-view-icon {
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
+
+.line-view-icon:hover svg {
+    background: #ff9900;
+}
+
+section.mspart {
+    padding-left: 2em;
+    background: rgba(230,230,230,0.5);
+}
+
+section > div.lg {
+    margin-left: 1rem;
+}
+
+section > table {
+    /*max-width: 55%;*/
+    border-spacing: 0 1rem;
+}
+
+th {
+    vertical-align: baseline;
+    font-size: 1rem;
+    line-height: 2rem;
+    padding-right: 2em;
+    hyphens: none;
+}
+
+th.left-align {
+    text-align: left;
+}
+
+thead th {
+    font-size: 1.4rem;
+}
+
+td {
+    font-size: 1.4rem;
+    line-height: 2rem;
+}
+
+td p:first-child {
+    margin-top: 0;
+}
+
+ul ul {
+    margin-left: 1rem;
+}
+
+div.para {width:100%;
+          text-align: justify;
+          padding: 1% 0 2% 0;
+}
+
+/*
+div.devanagari {font-size: 1.1em !important;
+              line-height: 150%;
+}
+
+span.devanagari {font-size: 1em !important;
+}
+
+p.devanagari {font-size: 1.2em !important;
+}
+
+div.malayalam {font-size: 1.2em !important;
+}
+span.malayalam {font-size: 1.1em !important;
+}
+p.malayalam {font-size: 1.3em !important;
+}
+
+div.telugu {font-size: 1.2em !important;
+          line-height: 150%;
+          word-spacing: 103%;
+}
+span.telugu {font-size: 1.1em !important;
+             line-height: 120%;
+}
+p.telugu {font-size: 1.3em !important;
+}
+
+.balinese {font-size: 1.1em !important;
+           line-height: 200%;
+}
+*/
+span.spacer {display: none;
+             white-space: pre-wrap; /* when the highlight function splits a spacer node, sometimes the whitespace gets collapsed */
+}
+/*
+:lang(sa) {
+    font-family: Brill, PedanticDevanagari, PedanticMalayalam, PedanticTelugu, Tantular Bali, serif;
+}
+*/
+
+.bengali:lang(sa) {
+    /*font-size: 1.5rem;*/
+}
+
+.teitext .bengali:lang(sa) {
+    font-size: 1.8rem;
+}
+.bengali:lang(sa).super, .bengali:lang(sa).sub {
+    font-size: 1.3rem;
+}
+
+h1 .bengali:lang(sa) {
+    font-size: 1em;
+}
+
+p.devanagari:lang(sa) {
+    font-size: 1.1em;    
+}
+
+div.teitext {
+    border: 0;
+    padding: 0 4% 0 0;
+    vertical-align:top;
+    font-size: 1.1em;
+    line-height:135%;
+    top: 2em;
+}
+
+.texttitle td {
+    font-size: 2rem;
+}
+
+#record-fat h2, #record-fat h3, #record-fat h4, #record-fat .editionStmt,
+#record-fat section > p, #record-fat section > div.lg, #record-fat section > table,
+.record-fat h2, .record-fat h3, .record-fat h4, .record-fat .editionStmt,
+.record-fat section > p, .record-fat section > div.lg, .record-fat section > table {
+    max-width: 800px;
+    width: 87.5%;
+}
+
+#record-thin h2, #record-thin h3, #record-thin h4, #record-thin .editionStmt,
+#record-thin section > p, #record-thin section > div.lg, #record-thin section > table,
+.record-thin h2, .record-thin h3, .record-thin h4, .record-thin .editionStmt,
+.record-thin section > p, .record-thin section > div.lg, .record-thin section > table {
+    /*max-width: 55%;*/
+    max-width: 550px;
+    width: 87.5%;
+}
+
+span.type {
+    padding-right: 1em;
+    font-variant: small-caps;
+}
+
+.teitext {
+    width: inherit;
+}
+
+.off {
+    display: none;
+}
+
+.mirador-osd-info {
+    padding-bottom: 8px !important;
+}
+
+#tooltip {
+    display: block;
+    position: fixed;
+    background: rgba(17,17,17,0.8);
+    border-radius: 4px;
+    color: #fff;
+    font-style: normal;
+    text-decoration: none;
+    font-size: 1rem;
+    letter-spacing: normal;
+    line-height: normal;
+    vertical-align: middle;
+    padding: 0.5em 1em;
+    margin-bottom: 11px;
+    max-width: 200px;
+    z-index: 3;
+}
+
+#tooltip hr {
+    border: 0;
+    margin-bottom: 3px;
+    margin-top: 3px;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(255,255,255,0),rgba(255,255,255,0.75),rgba(255,255,255,0));
+}

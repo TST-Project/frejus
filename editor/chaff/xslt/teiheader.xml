@@ -1,0 +1,211 @@
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+                xmlns:x="http://www.tei-c.org/ns/1.0"
+                exclude-result-prefixes="x">
+<xsl:output method="html" omit-xml-declaration="yes"/>
+
+<xsl:template match="x:titleStmt/x:title">
+    <xsl:element name="img">
+        <xsl:attribute name="class">editbutton</xsl:attribute>
+        <xsl:attribute name="id">headeredit</xsl:attribute>
+        <xsl:attribute name="src">edit_icon.svg</xsl:attribute>
+    </xsl:element>
+    <h1><xsl:apply-templates select="x:title[@type='sub']"/>
+        <xsl:if test="normalize-space(//x:msItem/x:title/@ref) != ''">
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="//x:msItem/x:title/@ref"/>
+                </xsl:attribute>
+                <img src="link_icon.svg" class="link"/>
+            </xsl:element>
+        </xsl:if>
+    </h1>
+    <h2><xsl:apply-templates select="x:title[@type='main']"/></h2>
+</xsl:template>
+
+<!--xsl:template match="x:titleStmt/x:author">
+    <h2><xsl:apply-templates /></h2>
+</xsl:template-->
+
+<!--xsl:template match="x:publicationStmt/x:distributor">
+    <p><xsl:apply-templates /></p>
+</xsl:template-->
+<xsl:template match="x:publicationStmt/x:distributor"/>
+
+<xsl:template match="x:msIdentifier">
+    <ul>
+    <li>
+        <xsl:apply-templates select="x:repository"/>
+        <xsl:if test="normalize-space(x:repository/@ref) != ''">
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="x:repository/@ref"/>
+                </xsl:attribute>
+                <img src="link_icon.svg" class="link"/>
+            </xsl:element>
+        </xsl:if>
+    </li>
+    <li>
+        <xsl:apply-templates select=".//x:settlement"/>
+        <xsl:if test=".//x:region">
+            <xsl:text>, </xsl:text>
+            <xsl:apply-templates select=".//x:region"/>
+        </xsl:if>
+        <xsl:if test=".//x:country">
+            <xsl:text>, </xsl:text>
+            <xsl:apply-templates select=".//x:country"/>
+        </xsl:if>
+    </li>
+    <!--li>
+        <xsl:text>Identifier: </xsl:text>
+        <xsl:apply-templates select="x:idno"/>
+        <xsl:text>.</xsl:text>
+    </li-->
+    </ul>
+    <p>Distributor: <xsl:value-of select="//x:publicationStmt/x:distributor"/>.</p>
+</xsl:template>
+
+<!--xsl:template match="x:physDesc">
+    <p><xsl:apply-templates/></p>
+</xsl:template-->
+
+<xsl:template match="x:msContents/x:summary">
+    <xsl:if test="normalize-space(.) != ''">
+        <p><xsl:apply-templates /></p>
+    </xsl:if>
+</xsl:template>
+
+<xsl:variable name="langs">
+    <lang name="san">Sanskrit</lang>
+    <lang name="pra">Prakrit</lang>
+    <lang name="hin">Hindi</lang>
+    <lang name="guj">Gujarati</lang>
+</xsl:variable>
+
+<xsl:template name="splitLang">
+    <xsl:param name="langs"/>
+    <xsl:if test="string-length($langs)">
+        <xsl:variable name="langstr" select="substring-before(concat($langs,' '),' ')"/>
+        <xsl:for-each select="document('')/xsl:stylesheet/xsl:variable[@name='langs']/*">
+            <xsl:if test="@name = $langstr">
+                <xsl:value-of select= "."/>
+                <xsl:text>. </xsl:text>
+            </xsl:if>
+        </xsl:for-each>
+        <xsl:call-template name="splitLang">
+            <xsl:with-param name="langs" select="substring-after($langs, ' ')"/>
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="x:msItem">
+    <p>
+    <xsl:if test="x:textLang/@mainLang">
+        <xsl:variable name="mainlang" select="x:textLang/@mainLang"/>
+        <xsl:for-each select="document('')/xsl:stylesheet/xsl:variable[@name='langs']/*">
+            <xsl:if test="@name = $mainlang">
+                <xsl:value-of select= "."/>
+                <xsl:text>. </xsl:text>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:if>
+    <xsl:if test="x:textLang/@otherLangs">
+        <xsl:call-template name="splitLang">
+            <xsl:with-param name="langs" select="x:textLang/@otherLangs"/>
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:apply-templates select="x:textLang"/>
+    </p>
+</xsl:template>
+
+<xsl:template match="x:objectDesc">
+    <p>
+    <xsl:if test="x:supportDesc/x:extent/x:measure">
+        <xsl:value-of select="x:supportDesc/x:extent/x:measure/@quantity"/>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="x:supportDesc/x:extent/x:measure/@unit"/><xsl:text>. </xsl:text>
+    </xsl:if>
+    <xsl:if test="normalize-space(x:supportDesc/x:extent/x:dimensions) != ''">
+        <xsl:value-of select="x:supportDesc/x:extent/x:dimensions/x:height" />
+        <xsl:text> x </xsl:text>
+        <xsl:value-of select="x:supportDesc/x:extent/x:dimensions/x:width" />
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="x:supportDesc/x:extent/x:dimensions/@unit"/>
+        <xsl:text>. </xsl:text>
+    </xsl:if>
+    <xsl:if test="x:layoutDesc/x:summary">
+        <xsl:apply-templates select="x:layoutDesc/x:summary"/>
+        <xsl:text> </xsl:text>
+    </xsl:if>
+    <xsl:if test="x:layoutDesc/x:layout">
+        <xsl:value-of select="translate(x:layoutDesc/x:layout/@writtenLines,' ','-')"/>
+        <xsl:text> lines per page. </xsl:text>
+    </xsl:if>
+    <xsl:if test="normalize-space(x:supportDesc/x:condition) != ''">
+        <xsl:value-of select="x:supportDesc/x:condition"/>
+        <xsl:text> </xsl:text>
+    </xsl:if>
+    </p>
+</xsl:template>
+
+
+<xsl:template match="x:handDesc">
+    <p>
+    <xsl:if test="x:handNote">
+        <xsl:variable name="LowerCase" select="'abcdefghijklmnopqrstuvwxyz'"/>
+        <xsl:variable name="UpperCase" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/>
+        <xsl:variable name="script" select="x:handNote/@script"/>
+        <xsl:variable name="scribe" select="x:handNote/@scribe"/>
+
+        <xsl:value-of select="translate(
+                substring($script,1,1),
+                $LowerCase,
+                $UpperCase
+            )"/>
+        <xsl:value-of select="substring($script,2,string-length($script)-1)"/>
+        <xsl:text> script. </xsl:text>
+        <xsl:if test="string-length($scribe) > 0">
+            <xsl:text>Scribe: </xsl:text>
+            <xsl:value-of select="$scribe"/>
+            <xsl:text>.</xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <xsl:if test="normalize-space(x:summary) != ''">
+        <xsl:apply-templates select="x:summary"/>
+    </xsl:if>
+    </p>
+</xsl:template>
+
+<xsl:template match="x:additions">
+    <xsl:if test="normalize-space(.) != ''">
+        <p>Additions: <xsl:apply-templates /></p>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="x:history">
+    <p>
+    <xsl:if test="normalize-space(x:origin/x:origPlace) != ''">
+        <xsl:text>Origin: </xsl:text>
+        <xsl:apply-templates select="x:origin/x:origPlace"/>
+        <xsl:text>. </xsl:text>
+    </xsl:if>
+    <xsl:if test="normalize-space(x:origin/x:origDate) != ''">
+        <xsl:text>Date: </xsl:text>
+        <xsl:apply-templates select="x:origin/x:origDate"/>
+        <xsl:text> (</xsl:text>
+        <xsl:value-of select="x:origin/x:origDate/@when-iso"/>
+        <xsl:text> CE)</xsl:text>
+        <xsl:text>. </xsl:text>
+    </xsl:if>
+    <xsl:if test="normalize-space(x:provenance) != ''">
+        <xsl:text>Provenance: </xsl:text>
+        <xsl:apply-templates select="x:provenance"/>
+        <xsl:text>. </xsl:text>
+    </xsl:if>
+    </p>
+</xsl:template>
+
+<xsl:template match="x:notesStmt/x:note">
+    <p><xsl:apply-templates /></p>
+</xsl:template>
+
+</xsl:stylesheet>

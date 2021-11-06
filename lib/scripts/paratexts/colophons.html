@@ -1,0 +1,1590 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta charset="utf-8">
+      
+      <title>Texts Surrounding Texts: Colophons</title>
+      
+      <link rel="icon" type="image/png" href="../../../mss/favicon-32.png">
+      <link rel="stylesheet" href="../../css/tufte.css">
+      <link rel="stylesheet" href="../../css/fonts.css">
+      <link rel="stylesheet" href="../../css/header.css">
+      <link rel="stylesheet" href="../../css/transcription.css">
+      <style type="text/css">
+        table, #index {
+            font-size: 1.4rem;
+            width: 85%;
+        }
+        #head {
+            background-color: #eee;
+            color: #666666;
+            cursor: default;
+            top: 0;
+            position: sticky;
+        }
+        tbody th {
+            text-align: left;
+        }
+        th.subpart {
+            padding-left: 1rem;
+        }
+        th.subsubpart {
+            padding-left: 1.5rem;
+        }
+        th {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+        td {
+            padding: 0.5rem;
+        }
+
+        .smallcaps {
+            font-variant: small-caps; 
+            font-size: 0.8em;
+        }
+        
+        #menu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            min-width: 1000px;
+            background-color: #eee;
+            color: #666666;
+            flex-direction: row;
+            font-size: 1.5rem;
+        }
+
+        #menu a[href] {
+            color: #666666;
+        }
+        #menu > div {
+            margin-right: 5rem;
+            padding: 0 1.5rem 0 1.5rem;
+        }
+        
+        #menu .main a[href] {
+            color: black;
+        }
+        
+        #menu .selected {
+            background-color: rgb(255,255,248);
+        }
+        
+        #menu a {
+            background-image: none;
+            text-shadow: none;
+        }
+        
+        #menu > div:hover {
+            background-color: rgb(255,255,248);
+        }
+        a[href] {
+            color: rgb(17,17,17);
+        }
+        a[href]::after {
+            background: none;
+            padding-right: 0;
+        }
+        a[href]:hover::after {
+            background: none;
+            padding-right: 0;
+        }
+
+        .milestone[data-loc] {
+            cursor: default;
+        }
+        
+        #tooltip {
+            display: block;
+            position: fixed;
+            background: rgba(17,17,17,0.8);
+            border-radius: 4px;
+            color: #fff;
+            font-style: normal;
+            text-decoration: none;
+            font-size: 1rem;
+            letter-spacing: normal;
+            line-height: normal;
+            vertical-align: middle;
+            padding: 0.5em 1em;
+            margin-bottom: 11px;
+            max-width: 200px;
+            z-index: 3;
+        }
+
+        #tooltip hr {
+            border: 0;
+            margin-bottom: 3px;
+            margin-top: 3px;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(255,255,255,0),rgba(255,255,255,0.75),rgba(255,255,255,0));
+        }
+        .dropper {
+            position: relative;
+            display: inline-block;
+        }
+        .dropped {
+            display: none;
+            position: absolute;
+            z-index: 1;
+            background-color: #eee;
+            margin-left: 0;
+            padding-left: 0;
+            left: 0;
+            width: max-content;
+        }
+        .dropped a {
+            width: 100%;
+            display: block;
+            padding-top: 0.5rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        .dropped a:hover {
+            background-color: rgb(255,255,248);
+        }
+
+        .dropper:hover .dropped {
+            display: block;
+        }
+      </style>
+      
+      <script type="text/javascript" src="../../js/sorttable.js"></script>
+      <script type="text/javascript">
+        // from https://stackoverflow.com/questions/28711653/sorting-string-function-by-custom-alphabet-javascript
+        function makeComparer(order) {
+          var ap = Array.prototype;
+
+          // mapping from character -> precedence
+          var orderMap = {},
+              max = order.length + 2;
+          ap.forEach.call(order, function(char, idx) {
+            orderMap[char] = idx + 1;
+          });
+
+          function compareChars(l, r) {
+            var lOrder = orderMap[l] || max,
+                rOrder = orderMap[r] || max;
+
+            return lOrder - rOrder;
+          }
+
+          function compareStrings(l, r) {
+            var minLength = Math.min(l.length, r.length);
+            var result = ap.reduce.call(l.substring(0, minLength), function (prev, _, i) {
+                return prev || compareChars(l[i], r[i]);
+            }, 0);
+
+            return result || (l.length - r.length);
+          }
+
+          return compareStrings;
+        }
+        sorttable.sort_alpha = function(a,b) {
+            const comparer = makeComparer('aāiīuūeēoōkgṅcñṭṇtnpbfmyrlvḻḷṟṉjṣśh');
+            return comparer(a[0].toLowerCase(),b[0].toLowerCase());
+        }
+        const docMouseover = function(e) {
+            var targ = e.target.closest('[data-anno]');
+            while(targ && targ.hasAttribute('data-anno')) {
+                toolTip.make(e,targ);
+                targ = targ.parentNode;
+            }
+        };
+        const toolTip = {
+            make: function(e,targ) {
+                console.log('yes');
+                const toolText = targ.dataset.anno;
+                if(!toolText) return;
+
+                var tBox = document.getElementById('tooltip');
+                const tBoxDiv = document.createElement('div');
+
+                if(tBox) {
+                    for(const kid of tBox.childNodes) {
+                        if(kid.myTarget === targ)
+                            return;
+                    }
+                    tBoxDiv.appendChild(document.createElement('hr'));
+                }
+                else {
+                    tBox = document.createElement('div');
+                    tBox.id = 'tooltip';
+                    tBox.style.top = (e.clientY + 10) + 'px';
+                    tBox.style.left = e.clientX + 'px';
+                    tBox.style.opacity = 0;
+                    tBox.style.transition = 'opacity 0.2s ease-in';
+                    document.body.appendChild(tBox);
+                    tBoxDiv.myTarget = targ;
+                }
+
+                tBoxDiv.appendChild(document.createTextNode(toolText));
+                tBoxDiv.myTarget = targ;
+                tBox.appendChild(tBoxDiv);
+                targ.addEventListener('mouseleave',toolTip.remove,{once: true});
+                window.getComputedStyle(tBox).opacity;
+                tBox.style.opacity = 1;
+            },
+            remove: function(e) {
+                const tBox = document.getElementById('tooltip');
+                if(tBox.children.length === 1) {
+                    tBox.remove();
+                    return;
+                }
+
+                const targ = e.target;
+                for(const kid of tBox.childNodes) {
+                    if(kid.myTarget === targ) {
+                        kid.remove();
+                        break;
+                    }
+                }
+                if(tBox.children.length === 1) {
+                    const kid = tBox.firstChild.firstChild;
+                    if(kid.tagName === 'HR')
+                        kid.remove();
+                }
+            },
+        };
+      </script>
+   </head>
+   <body lang="en">
+    <div id="menu">
+        <div class="main"><a href="https://tst.hypotheses.org">Texts Surrounding Texts</a></div>
+        <div><a href="../../../mss">Manuscripts</a></div>
+        <div class="dropper">
+            <span>Tools</span>
+            <div class="dropped">
+                <a href="../../../editor">TST editor</a>
+                <a href="https://github.com/chchch/quick-palaeographer">Quick palaeographer</a>
+            </div>
+        </div>
+        <div><a href="../../../editor/entities.html">Tamil transcription</a></div>
+        <div class="dropper">
+            <span>Paratexts</span>
+            <div class="dropped">
+                <a href="blessings.html">Blessings</a>
+                <a href="colophons.html">Colophons</a>
+            </div>
+        </div>
+        <div><a href="../../../xylotheque">Xylothèque</a></div>
+    </div>
+    <article>
+        <section>
+            <table id="index" class="sortable">
+                <tbody><tr id="head"><th>Colophon</th><th class="sorttable_alphanum">Shelfmark</th><th>Repository</th><th>Title</th></tr><tr>
+<td>
+lakṣmīnarasiṃhaparabrahmaṇe namaḥ |
+</td>
+<td><a href="../mss/../../../mss/Cod_Palmbl_II_227.xml">Cod. Palmbl. II 227</a></td>
+<td>
+Hamburg Stabi
+</td>
+<td>
+Tattvacintāmaṇi commentary
+</td>
+</tr>
+<tr>
+<td>
+oṃ tatsat brahmārpaṇamastu |
+</td>
+<td><a href="../mss/../../../mss/Cod_Palmbl_I_12.xml">Cod. Palmbl. I 12</a></td>
+<td>
+Hamburg Stabi
+</td>
+<td>
+Upaniṣad-s and Śārīrakamīmāṃsā
+</td>
+</tr>
+<tr>
+<td>
+oṃ tatsat |
+</td>
+<td><a href="../mss/../../../mss/Cod_Palmbl_I_12.xml">Cod. Palmbl. I 12</a></td>
+<td>
+Hamburg Stabi
+</td>
+<td>
+Upaniṣad-s and Śārīrakamīmāṃsā
+</td>
+</tr>
+<tr>
+<td>
+om tatsat | śrīgurucaraṇāravin̆dārpaṇamastu |
+</td>
+<td><a href="../mss/../../../mss/Cod_Palmbl_I_12.xml">Cod. Palmbl. I 12</a></td>
+<td>
+Hamburg Stabi
+</td>
+<td>
+Upaniṣad-s and Śārīrakamīmāṃsā
+</td>
+</tr>
+<tr>
+<td>
+oṃ tatsat |
+</td>
+<td><a href="../mss/../../../mss/Cod_Palmbl_I_12.xml">Cod. Palmbl. I 12</a></td>
+<td>
+Hamburg Stabi
+</td>
+<td>
+Upaniṣad-s and Śārīrakamīmāṃsā
+</td>
+</tr>
+<tr>
+<td>
+oṃ tatsat brahmārpaṇamastu |
+</td>
+<td><a href="../mss/../../../mss/Cod_Palmbl_I_12.xml">Cod. Palmbl. I 12</a></td>
+<td>
+Hamburg Stabi
+</td>
+<td>
+Upaniṣad-s and Śārīrakamīmāṃsā
+</td>
+</tr>
+<tr>
+<td>
+oṃ tatsat brahmārpaṇamastu |
+</td>
+<td><a href="../mss/../../../mss/Cod_Palmbl_I_12.xml">Cod. Palmbl. I 12</a></td>
+<td>
+Hamburg Stabi
+</td>
+<td>
+Upaniṣad-s and Śārīrakamīmāṃsā
+</td>
+</tr>
+<tr>
+<td>
+śrīkṛṣṇārpaṇamastu|
+</td>
+<td><a href="../mss/../../../mss/Cod_Palmbl_I_12.xml">Cod. Palmbl. I 12</a></td>
+<td>
+Hamburg Stabi
+</td>
+<td>
+Upaniṣad-s and Śārīrakamīmāṃsā
+</td>
+</tr>
+<tr>
+<td>
+śrīgurucaraṇāravindārpaṇamastu | oṃ tatsat |
+</td>
+<td><a href="../mss/../../../mss/Cod_Palmbl_I_12.xml">Cod. Palmbl. I 12</a></td>
+<td>
+Hamburg Stabi
+</td>
+<td>
+Upaniṣad-s and Śārīrakamīmāṃsā
+</td>
+</tr>
+<tr>
+<td>
+oṃ tatsat brahmārpaṇamastu |
+</td>
+<td><a href="../mss/../../../mss/Cod_Palmbl_I_12.xml">Cod. Palmbl. I 12</a></td>
+<td>
+Hamburg Stabi
+</td>
+<td>
+Upaniṣad-s and Śārīrakamīmāṃsā
+</td>
+</tr>
+<tr>
+<td>
+oṃ tatsat brahmārpaṇamastu |
+</td>
+<td><a href="../mss/../../../mss/Cod_Palmbl_I_12.xml">Cod. Palmbl. I 12</a></td>
+<td>
+Hamburg Stabi
+</td>
+<td>
+Upaniṣad-s and Śārīrakamīmāṃsā
+</td>
+</tr>
+<tr>
+<td>
+oṃ tatsat brahmārpaṇamastu | virodhikṛcchrāvaṇe'hni pūrṇimārkajasaṃyute | togere pustakamidaṃ saṃpūrṇaṃ likhitaṃ mayā |
+</td>
+<td><a href="../mss/../../../mss/Cod_Palmbl_I_12.xml">Cod. Palmbl. I 12</a></td>
+<td>
+Hamburg Stabi
+</td>
+<td>
+Upaniṣad-s and Śārīrakamīmāṃsā
+</td>
+</tr>
+<tr>
+<td>
+caṟuvatāri <span class="gaiji" data-anno="varuṣam">௵</span> māci <span class="gaiji" data-anno="mācam">௴</span> 29 <span class="gaiji" data-anno="tēti">௳</span> <span class="unclear" data-anno="unclear">pomma</span>puriyil Irukkum Amuṟtapāṇit tampirāṉ <span class="pb" lang="en" data-loc="70" data-n="p. 32v" data-anno="page 32v image 70">␤</span> <span class="lb" lang="en" data-anno="line 1" data-n="1">␤</span>piṟiti Ēṭu pāttu pātūrc cittampalavaṉ Eḻutu<span class="unclear" data-anno="unclear"><span class="bold" lang="sa">=m</span></span> piṟiti
+</td>
+<td><a href="../mss/../../../mss/Indien_0002.xml">Indien 2</a></td>
+<td>
+BnF
+</td>
+<td>
+Caṅkaṟpanirākaraṇam (text and commentary)
+</td>
+</tr>
+<tr>
+<td>
+Itu ṟā Urai piṟakē Eḻutiyirukkutu
+</td>
+<td><a href="../mss/../../../mss/Indien_0002.xml">Indien 2</a></td>
+<td>
+BnF
+</td>
+<td>
+Caṅkaṟpanirākaraṇam (text and commentary)
+</td>
+</tr>
+<tr>
+<td>
+caṅkaṟpanirākaraṇam eḻuti muṭintatu mu <span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span><span class="sic" data-anno="sic">ttu</span>m <span class="gaiji" data-anno="piḷḷaiyār cuḻi (short)">௳</span> pātūr vi<span class="unclear" data-anno="unclear">cu</span>vaku <span lang="en" class="gap" data-anno="gap of 1 character (illegible)"><span>?</span></span> cantatiyil citta<span class="bold" lang="sa">=m</span>palavaṉ Eḻuttu
+</td>
+<td><a href="../mss/../../../mss/Indien_0002.xml">Indien 2</a></td>
+<td>
+BnF
+</td>
+<td>
+Caṅkaṟpanirākaraṇam (text and commentary)
+</td>
+</tr>
+<tr>
+<td>
+kaliyukam <span lang="en" class="space" data-anno="vacat"><span>_</span></span> t=tu <span class="gaiji" data-anno="varuṣam">௵</span> cellum viya <span class="gaiji" data-anno="varuṣam">௵</span> tai {māca}t=tu 4 <span class="gaiji" data-anno="tēti">௳</span> <sub>rokaṇiya<span class="bold" lang="sa">=m</span></sub> Eḻuti niraveṟiṉatu muttum
+</td>
+<td><a href="../mss/../../../mss/Indien_0002.xml">Indien 2</a></td>
+<td>
+BnF
+</td>
+<td>
+Caṅkaṟpanirākaraṇam (text and commentary)
+</td>
+</tr>
+<tr>
+<td>
+<span class="unclear" data-anno="unclear">pomma</span>puriyil irukkum Amuṟtapāṉit tampiraṉ piṟiti pāttu Eḻu<span class="unclear" data-anno="unclear (consonant_unclear)">ti</span>tu
+</td>
+<td><a href="../mss/../../../mss/Indien_0002.xml">Indien 2</a></td>
+<td>
+BnF
+</td>
+<td>
+Caṅkaṟpanirākaraṇam (text and commentary)
+</td>
+</tr>
+<tr>
+<td>
+caṟacitti <span lang="en" class="note
+ inline" data-anno="note
+ ">i.e. <span lang="ta" class="term ">carvacittu</span></span> <span class="gaiji" data-anno="varuṣam">௵</span> puṟaṭṭāc<span class="choice" data-anno="choice"><span class="sic" data-anno="sic (corrected: ci)">cī</span></span> <span class="gaiji" data-anno="mācam">௴</span> <sub xmlns:exsl="http://exslt.org/common">2<span class="unclear" data-anno="unclear">10</span>2 <span class="gaiji" data-anno="tēti">௳</span></sub> amaṟapaṣṣim pañcami putavāram – naṭune<span class="choice" data-anno="choice"><span class="unclear" data-anno="unclear">ṟ</span><span class="unclear" data-anno="unclear">ṟa</span></span> – māṉa <span lang="en" class="note
+ inline" data-anno="note
+ ">i.e. <span lang="ta" class="term ">naṭu<span class="invisible">-</span>nēram<span class="invisible">-</span>āṉa</span>?</span> <span class="lb" lang="en" data-anno="line 5" data-n="5">␤</span>tiṉattil y<span class="invisible">-</span>eḻutiṉatu kuruṉātaṉ aruḷiya <del data-anno="deleted">ṟ</del> paṭi mū<span class="choice" data-anno="choice"><span class="sic" data-anno="sic (corrected: ṟṟu)">ttu</span></span>m
+</td>
+<td><a href="../mss/../../../mss/Indien_0004a.xml">Indien 4a</a></td>
+<td>
+BnF
+</td>
+<td>
+Rāmatēvar Pūcāviti
+</td>
+</tr>
+<tr>
+<td>
+cupāṉu {varuṣam} cittirai {mācam} 10 4 {tēti} kuruvāramum pūcanakṣattiramum cattamiyuṅ kūṭiṉa cupatiṉattilē civakkiyāṉapōtakam Eḻuti niṟai veṟiṉatu muṟṟum
+</td>
+<td><a href="../mss/../../../mss/Indien_0022.xml">Indien 22</a></td>
+<td>
+BnF
+</td>
+<td>
+Collection: 2 Śaiva works
+</td>
+</tr>
+<tr>
+<td>
+cupāṉu {varuṣam} vai<span class="unclear" data-anno="unclear (vowel_unclear)">yā</span><span class="supplied lost" data-anno="supplied (lost)">ci</span> <span class="unclear" data-anno="unclear">{mācam}</span> 3 {tēti} caṉivaṟāmum <span class="unclear" data-anno="unclear"><span class="bold" lang="sa">dvi</span></span>tikaiyu<span class="bold" lang="sa">=m</span> rōkaṇinakṣattiramuṅ kūṭiṉa tiṉattilē civakkiyācittiyār cup <span class="lb" lang="en" data-nobreak="" data-anno="line 6" data-n="6">␤</span>pakṣam Eḻuti muṭintatu
+</td>
+<td><a href="../mss/../../../mss/Indien_0022.xml">Indien 22</a></td>
+<td>
+BnF
+</td>
+<td>
+Collection: 2 Śaiva works
+</td>
+</tr>
+<tr>
+<td>
+cupakiṟa <span class="gaiji" data-anno="varuṣam">௵</span> taiyi <span class="gaiji" data-anno="mācam">௴</span> {mutal} <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>y<span class="invisible">-</span>eḻutiṉatu Ātticuvaṭi [<span lang="en" class="term ">i.e.</span> Ātticuṭi] <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>putuvaiyil
+</td>
+<td><a href="../mss/../../../mss/Indien_0065.xml">Indien 65</a></td>
+<td>
+BnF
+</td>
+<td>
+Works by Auvaiyār (2 items)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="en" class="gap" data-anno="gap of 4 characters (illegible)"><span>????</span></span> pā<span class="choice" data-anno="choice"><span class="unclear" data-anno="unclear">r</span><span class="unclear" data-anno="unclear">ra</span></span>ppara <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>y eḻu<span class="unclear" data-anno="unclear">t=tu</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0066.xml">Indien 66</a></td>
+<td>
+BnF
+</td>
+<td>
+Tirumurukāṟṟuppaṭai
+</td>
+</tr>
+<tr>
+<td>
+<span lang="en" class="gap" data-anno="gap of 1 character (illegible)"><span>?</span></span> virācāmi <span lang="en" class="term ">{horizontal line}</span> <span class="unclear" data-anno="unclear">100</span> <span lang="en" class="term ">{horizontal line}</span> <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>y<span class="invisible">-</span>eḻutiṉatu <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0066.xml">Indien 66</a></td>
+<td>
+BnF
+</td>
+<td>
+Tirumurukāṟṟuppaṭai
+</td>
+</tr>
+<tr>
+<td>
+tirumurukāṟṟuppaṭai muṟṟiṟṟu <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span> cupāṉu <span class="gaiji" data-anno="varuṣam">௵</span> cittirai <span class="gaiji"></span> 22 <span class="gaiji"></span> caṉikkiḻamai Eḻuti niṟai veṟiṟṟu
+</td>
+<td><a href="../mss/../../../mss/Indien_0067.xml">Indien 67</a></td>
+<td>
+BnF
+</td>
+<td>
+Tirumurukāṟṟuppaṭai (text and commentary interspersed)
+</td>
+</tr>
+<tr>
+<td>
+nantaṉa {varuṣam} Aṟpici {mācam} 2 10 7 {tēti} <span class="persname" data-anno="person name">Ariyaraputti Upāttiyār</span> Oḻiviloṭukkam y<span class="invisible">-</span>eḻuti <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>niṟaveṟiṉatu muṟṟu<span class="bold" lang="sa">=m</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0071.xml">Indien 71</a></td>
+<td>
+BnF
+</td>
+<td>
+Oḻiviloṭukkam
+</td>
+</tr>
+<tr>
+<td>
+maṉmatha {varuṣam} Āvaṇi {mācam} 2 10 <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span> kuruvāram Uttiranaṣcet=tiram tuvateci titi Amuṟtayōkam Ippērppaṭṭa cupatiṉattil <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>mutaliyārpēṭṭaiyil ceṉṉappaṭṭaṇat=til iruntu <span lang="en" class="gap" data-anno="gap of 1 character (lost)"><span>?</span></span> nt<span class="invisible">'</span> irukkum kaṟuttāḻiyār kumārar<span class="invisible">-</span>ākiya vāttiyār <span class="lb" lang="en" data-anno="line 4" data-n="4">␤</span>cuppak=ku yaḻiyāruk=ku {mērpaṭi} putuvaiyil irukkum vīrappiḷḷai kumāraṉ<span class="invisible">-</span>ākiya capāpati nālatu taitiyil eḻuti muṭi <span class="lb" lang="en" data-anno="line 5" data-n="5">␤</span>vāṉavāciṭṭamum y<span class="invisible">-</span>itaṟku muṉ Inta puttakattuḷ kōratt<span class="invisible">'</span> irukkiṟa <span class="choice" data-anno="choice"><span class="sic" data-anno="sic (corrected: ko)">ku</span></span>lai maṟuttal eṉṟuñ cāt=tiramum y<span class="invisible">-</span>eḻuti-k <span class="lb" lang="en" data-anno="line 6" data-n="6">␤</span>kuṭuttat<span class="invisible">'</span> eṉṟ<span class="invisible">'</span> aṟiyalu<span class="bold" lang="sa">=m</span> vāciṭṭam y<span class="invisible">-</span>eḻuti niṟa vēṟiyatu muṟṟiṟṟu
+</td>
+<td><a href="../mss/../../../mss/Indien_0083.xml">Indien 83</a></td>
+<td>
+BnF
+</td>
+<td>
+Collection (2 items): Kolai Maṟuttal &amp; Ñāṉavāciṭṭam
+</td>
+</tr>
+<tr>
+<td>
+Iṟāmacāmiyuṭaiya ~ v-uḷḷamuṭaiyāṉ cāttiram <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>Itu Eḻutiṉatu · Iṟāmacāmi tāṉ Eḻutiṉatu
+</td>
+<td><a href="../mss/../../../mss/Indien_0089.xml">Indien 89</a></td>
+<td>
+BnF
+</td>
+<td>
+Uḷḷamuṭaiyāṉ Cūṭāmaṇi    
+</td>
+</tr>
+<tr>
+<td>
+<span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> patam vaṇaṅki yeḻuti muṭintatu niṟai veṟiyatē = muṟṟum =
+</td>
+<td><a href="../mss/../../../mss/Indien_0091.xml">Indien 91</a></td>
+<td>
+BnF
+</td>
+<td>
+Uḷḷamuṭaiyāṉ Cūṭāmaṇi
+</td>
+</tr>
+<tr>
+<td>
+vi<span class="unclear" data-anno="unclear (consonant_unclear)">ya</span> {varuṣam} māci {mācam} 10 9 {tēti} viyāḻam varat=til eḻutappaṭṭat<span class="invisible">’</span> ām
+</td>
+<td><a href="../mss/../../../mss/Indien_0106.xml">Indien 106</a></td>
+<td>
+BnF
+</td>
+<td>
+Akattiyar Ñāṉam 30
+</td>
+</tr>
+<tr>
+<td>
+copié par Jagannadan' sur le mss. <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>original appartenant au gouvernement <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>des Etablissements français dans l'Inde, <span class="lb" lang="en" data-anno="line 4" data-n="4">␤</span>déposé au greffe du comité de jurisprudence indienne. <span class="lb" lang="en" data-anno="line 5" data-n="5">␤</span>Ce mss. se compose de 16 cahiers de papier écolier, <span class="lb" lang="en" data-anno="line 6" data-n="6">␤</span>les 11 premiers paginés de 1 à 864, les autres ont <span class="lb" lang="en" data-anno="line 7" data-n="7">␤</span>de 10 a 12 feuilles faisant ensemble 222 pages, <span class="lb" lang="en" data-anno="line 8" data-n="8">␤</span>ce qui porte le tout à 1086 pages <span class="lb" lang="en" data-anno="line 9" data-n="9">␤</span>EA <span lang="en" class="note
+ inline" data-anno="note
+ ">Ariel initials signature</span> <span class="lb" lang="en" data-anno="line 10" data-n="10">␤</span>Collationné par Jagannadan &amp; Appasâmi. <span class="lb" lang="en" data-anno="line 11" data-n="11">␤</span>EA <span lang="en" class="note
+ inline" data-anno="note
+ ">Ariel initials signature</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0142.xml">Indien 142</a></td>
+<td>
+BnF
+</td>
+<td>
+Miruticantirikai
+</td>
+</tr>
+<tr>
+<td>
+<span lang="en" class="note
+ inline" data-anno="note
+ ">by Ariel</span> <span lang="fr" class="term ">Fin du 8<sup xmlns:exsl="http://exslt.org/common">e</sup> et dernier cahier de 21 pp. doubles indépendant <span class="lb" lang="en" data-anno="line 23" data-n="23">␤</span>de la pagin<sup xmlns:exsl="http://exslt.org/common">n</sup> générale aux 11 premiers, <span class="lb" lang="en" data-anno="line 24" data-n="24">␤</span>avec lesquels se complète le nombre 16. <span class="lb" lang="en" data-anno="line 25" data-n="25">␤</span>EA</span> <span lang="en" class="note
+ inline" data-anno="note
+ ">Ariel initials signature</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0142.xml">Indien 142</a></td>
+<td>
+BnF
+</td>
+<td>
+Miruticantirikai
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term ">copié par <span class="persname" data-anno="person name">Rattinam</span>. <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>collationné par <span class="persname" data-anno="person name">lui <span lang="en" class="note
+ inline" data-anno="note
+ ">i.e. Rattinam</span></span> &amp; <span class="persname" data-anno="person name">Djaganaden</span> (juin 1849).</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term ">copié par <span class="persname" data-anno="person name">Rattinam</span>. <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>collationné par <span class="persname" data-anno="person name">lui <span lang="en" class="note
+ inline" data-anno="note
+ ">i.e. Rattinam</span></span> &amp; <span class="persname" data-anno="person name">Djaganaden</span> <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>revu par moi <span lang="en" class="note
+ inline" data-anno="note
+ ">i.e. Ariel</span> (1849).</span> <span class="lb" lang="en" data-anno="line 4" data-n="4">␤</span><span lang="fr" class="term ">EA</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span></span> <span lang="fr" class="term ">EA</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span></span> <span lang="fr" class="term ">EA</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span></span> <span lang="fr" class="term ">EA</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span></span> <span lang="fr" class="term ">EA</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span></span> <span lang="fr" class="term ">EA</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span></span> <span class="lb" lang="en" data-anno="line 28" data-n="28">␤</span><span lang="fr" class="term ">EA</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span></span> <span class="lb" lang="en" data-anno="line 29" data-n="29">␤</span><span lang="fr" class="term ">EA</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> <span class="lb" lang="en" data-anno="line 12" data-n="12">␤</span><span lang="fr" class="term ">EA</span> </span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span></span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span></span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span></span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span></span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span></span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span></span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span></span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term "><span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span></span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0143.xml">Indien 143</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span lang="fr" class="term ">Cette table est <del data-anno="deleted">tirée</del> copiée de la 1<sup xmlns:exsl="http://exslt.org/common">ere</sup> feuille du Registre de la Chronique <span class="lb" lang="en" data-anno="line 18" data-n="18">␤</span>depuis le 21<sup xmlns:exsl="http://exslt.org/common">e</sup> Adi de l'an Târaṇa (<span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> 1764) jusqu'au 10 Vaéyyaçi <span class="lb" lang="en" data-anno="line 19" data-n="19">␤</span>copié par <span class="persname" lang="fr" data-anno="person name">Rattinam</span>, collationné par le même <span class="persname" lang="fr" data-anno="person name">Dja<ins class="add" data-anno="inserted">gan</ins>naden</span>: <span class="lb" lang="en" data-anno="line 20" data-n="20">␤</span>(Juin 1849.) ___ EA.</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0158.xml">Indien 158</a></td>
+<td>
+BnF
+</td>
+<td>
+Ariel Papers: Copies of Official Documents (Pondicherry)
+</td>
+</tr>
+<tr>
+<td>
+<span class="milestone biggap" lang="en" data-loc="56" data-anno="image 56">page 52</span>Fin de la Grammaire - A la Plus Grande Gloire de Dieu. Faite a Pondichery et achevèe le 18es 9bre 1728 Par un Missionaire de la Comp.e de Jesus de la Mission du Carnat
+</td>
+<td><a href="../mss/../../../mss/Indien_0189.xml">Indien 189</a></td>
+<td>
+BnF
+</td>
+<td>
+Grammaire Tamoul. Grammaire pour apprendre la langue Tamoul Ditte Vulgaireiment le Malabar
+</td>
+</tr>
+<tr>
+<td>
+tāraṇa <span class="gaiji" data-anno="varuṣam">௵</span> piṟaṭṭāci <span class="gaiji" data-anno="mācam">௴</span> <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>2 10 7 {tēti} nayattukiḻamai ṉāḻikai 10 5 – tiritikai ṉāḻikai – 10 5 – paraṇiṉāḻi 10 4 cittiyōkaṉāḻi 15 • yinta cupa-<span class="choice" data-anno="choice"><span class="sic" data-anno="sic (corrected: ti)">ta</span></span>ṉatillē Eṟamaṉuyakkaṉ kumāraṉ ṟaṅkacāmi <span class="gaiji" data-anno="as above">௸</span> <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>paṭikkiṉṟa mayilatiruppukaḻ Eḻuti mukintutu yitu yeḻutiṉatu keṇṭikoṭṭai ṟāmuṉayakkaṉ kumāraṉ ṟaṅkacāmi <span lang="en" class="gap" data-anno="gap of 1 character (illegible)"><span>?</span></span> pāṭṭaṉ <span class="lb" lang="en" data-anno="line 4" data-n="4">␤</span>veṅkiṭācala<span class="unclear" data-anno="unclear (vowel_unclear)">ṉu</span> kaiyi Eḻut=tu
+</td>
+<td><a href="../mss/../../../mss/Indien_0244.xml">Indien 244</a></td>
+<td>
+BnF
+</td>
+<td>
+Mayilattiruppukaḻ
+</td>
+</tr>
+<tr>
+<td>
+<span class="milestone biggap" lang="en" data-loc="681" data-anno="image 681">folio 337r6</span>{Āka}p paṭalam · 2 10 8k=ku viruttam <span class="gaiji" data-anno="piḷḷaiyār cuḻi (short)">௳</span> 1000 6 10 9 69 <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span> kara {varuṣam} Āṉi <span class="lb" lang="en" data-anno="line 7" data-n="7">␤</span>{mācam} 2 10 6 <span class="gaiji" data-anno="piḷḷaiyār cuḻi (short)">௳</span> maṅkaḷavarāmum tiruvoṇanaṭcattiramuṅ kūṭiya tiṉattil eḻuti muṭintatu <span class="gaiji" data-anno="piḷḷaiyār cuḻi (short)">௳</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0250.xml">Indien 250</a></td>
+<td>
+BnF
+</td>
+<td>
+Naiṭatam, with commentary
+</td>
+</tr>
+<tr>
+<td>
+nalliyaṟa pullarākum navaiyaṟu kāṭci yul̥lōr <br class="caesura"> colliya toṭarpiṉō ṭeṉcoṟ <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span> kuṟaikaviyu mēvuñ <br class="caesura"> collitaṉ ṉiṭattō kūrāc cēyiḻai maṭaṉalāru <br class="caesura"> mellitaṭa kamalap pōtiṉmēvu pulliyamē pōṉṟē //88// <br class="caesura"> veṇpā // <br class="caesura"> piṉṉāvaru muṉṉāvarum pēcu<span class="lb" lang="en" data-nobreak="" data-anno="line 3" data-n="3">␤</span>ka tainirappat <br class="caesura"> taṉṉaini kāl̥atti taṉṉilvāḻ muṉṉavaveṉṉeñ <br class="caesura"> canti yaṅkā maṉṉī yeṉṉul̥at tiruntēyañ <br class="caesura"> canti yāṉē yarul̥ // <br class="caesura"> viya va° māci ma° 7. caṉivāraṉul̥<span class="lb" lang="en" data-nobreak="" data-anno="line 6" data-n="6">␤</span> karaveṭṭi vayittiyaṉātaṉ yeḻutiya kāl̥attipurāṇa meḻuti niṟaintatu. <span lang="sa" class="term ">ṣaṇmukhadēśikāya namaḥ</span> [<span lang="en" class="term ">grantha</span>].
+</td>
+<td><a href="../mss/../../../mss/Indien_0300.xml">Indien 300</a></td>
+<td>
+BnF
+</td>
+<td>
+Tirukāḷahastipurāṇam (Cīkāḷattipurāṇam)
+</td>
+</tr>
+<tr>
+<td>
+naḷa varuṣam kāṟttikai <span class="gaiji" data-anno="mācam">௴</span> 27 <span class="gaiji" data-anno="tēti">௳</span> kuruvāṟa-ṉāḷ-k kālamē <span class="lb" lang="en" data-anno="line 4" data-n="4">␤</span>Uttiraṭṭāti-naṣcattirattil śrīmucē parititu vācimut<span class="unclear" data-anno="unclear (vowel_unclear)">ti</span>ya-p-piḷḷaikaḷ Ava <span class="lb" lang="en" data-nobreak="" data-anno="line 5" data-n="5">␤</span>rkaḷ vaḷḷiyammaipuṟāṇattai kaṉṉiyappaṉ Eḻuti muṭintatu muṟṟum
+</td>
+<td><a href="../mss/../../../mss/Indien_0309.xml">Indien 309</a></td>
+<td>
+BnF
+</td>
+<td>
+Vaḷḷiyammaipuṟāṇacāram
+</td>
+</tr>
+<tr>
+<td>
+836 <span class="gaiji" data-anno="varuṣam">௵</span> Āvaṇi <span class="unclear" data-anno="unclear (eccentric_ductus)"><span class="gaiji" data-anno="mācam">௴</span></span>m 5 <span class="gaiji" data-anno="tēti">௳</span> <span class="lb" lang="en" data-anno="line 7" data-n="7">␤</span>cōmavāramum tutikaiyum makanakkettiramum [<span lang="en" class="term ">i.e.</span> makānaṭcattiram] I<span class="choice" data-anno="choice"><span class="orig" data-anno="original (regular: nnā)">ṉṉā</span></span>ḷil Evaṇāccittayar kāriyakattar<span class="invisible">-</span>āṉa [<span lang="en" class="term ">i.e.</span> kāriyakarttar<span class="invisible">-</span>āṉa] ticaimuka <span class="pb" lang="en" data-n="p. 422v" data-anno="page 422v">␤</span> <span class="lb" lang="en" data-nobreak="" data-anno="line 1" data-n="1">␤</span> ni<span class="unclear" data-anno="unclear">k</span>kuṇa<span class="invisible">-</span>p<span class="invisible">-</span>piṟavu<span class="invisible">-</span>caivacittāntaṉ [<span lang="en" class="term ">i.e.</span> nirkkuṇa<span class="invisible">-</span>] vīracaiva<span class="invisible">-</span><span class="unclear" data-anno="unclear">ka</span>ṟttācāriyaṉ [<span lang="en" class="term ">i.e.</span> <span class="invisible">-</span>karttācāriyaṉ] ciṣar-āṉa cantira<span lang="en" class="gap" data-anno="gap of 1 character (illegible)"><span>?</span></span>-cēkara-ceṉṉa-<span class="unclear" data-anno="unclear">v</span>īramūṟtti [<span lang="en" class="term ">i.e.</span> -caṉṉa-vīramūrtti] kātal<span class="invisible">-</span>puttira <span class="lb" lang="en" data-nobreak="" data-anno="line 2" data-n="2">␤</span>ṉ<span class="invisible">-</span>āṉa poṉṉ<span class="invisible">-</span>ampala<span class="invisible">-</span>tēvar makaṉ cokkaliṅkaṉ kaiyāl eḻutiṉa kūrmapurāṇamuṟṟum
+</td>
+<td><a href="../mss/../../../mss/Indien_0318.xml">Indien 318</a></td>
+<td>
+BnF
+</td>
+<td>
+Kūrmapurāṇam
+</td>
+</tr>
+<tr>
+<td>
+cittirapāṉu {varuṣam} vaiyāci {macam} 10 3 {tēti} Ātivāramum rōkaṇi-naṭca<span class="unclear" data-anno="unclear">t=ti</span>ramu<span class="bold" lang="sa">=m</span> kūṭiṉa puṇṇiyatiṉa<span class="unclear" data-anno="unclear">t=ti</span>il cantira-cē <span class="lb" lang="en" data-nobreak="" data-anno="line 8" data-n="8">␤</span>karaṉ mu<span class="unclear" data-anno="unclear">t=tu</span>u<span class="unclear" data-anno="unclear">k=ku</span>umaraṉ kuruṉātaṉ kūrmapurāṇam y<span class="invisible">-</span>eḻiti mukintatu muṟṟum
+</td>
+<td><a href="../mss/../../../mss/Indien_0319.xml">Indien 319</a></td>
+<td>
+BnF
+</td>
+<td>
+Kūrmapurāṇam
+</td>
+</tr>
+<tr>
+<td>
+kilāka {varuṣam} Āvaṇi {mācam} 20 10 9 {tēti} y-ekāteci-v uttama-kuruvāraṉāḷ pāla-vīrayyaṉ y-eḻuti mukintutu
+</td>
+<td><a href="../mss/../../../mss/Indien_0320.xml">Indien 320</a></td>
+<td>
+BnF
+</td>
+<td>
+Kūrmapurāṇam
+</td>
+</tr>
+<tr>
+<td>
+kāntam eḻuti niṟaveṟittutu. vikuṟati <span class="gaiji" data-anno="varuṣam">௵</span> Āṭi <span class="gaiji" data-anno="mācam">௴</span> 3 <span class="gaiji" data-anno="tēti">௳</span> 1830 <span class="gaiji" data-anno="varuṣam">௵</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0327.xml">Indien 327</a></td>
+<td>
+BnF
+</td>
+<td>
+Kantapurāṇam, Volume 4
+</td>
+</tr>
+<tr>
+<td>
+cakārttam – 1630 <span class="gaiji" data-anno="varuṣam">௵</span> (m)eṟ cellā niṉṟa ca(ṟu)citti [<span lang="en" class="term ">i.e.</span> caruvacittu] varu<em class="bold">ṣa</em>m Āvaṇi mācam mutal <span class="gaiji" data-anno="tēti">௳</span> veḷḷikkiḻamaiyum pūruvapa<em class="bold">kṣa</em>ttuc catu(ṟt)eciyum pūca-na<em class="bold">kṣa</em>ttiramum peṟṟa Utta(ma)tiṉattil mēlaipāṭṭ(ā)mpākka <span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span>ñ (ci)tam(pa)raiyar avarkaḷ maṭattukkuk kantappurāṇam Eḻuti niṟaiveṟiyatu muṟṟum <span class="gaiji" data-anno="piḷḷaiyār cuḻi (short)">௳</span> Itu cuppiṟamaṇiya tampirāṉ Eḻuttu
+</td>
+<td><a href="../mss/../../../mss/Indien_0329.xml">Indien 329</a></td>
+<td>
+BnF
+</td>
+<td>
+Kantapurāṇam
+</td>
+</tr>
+<tr>
+<td>
+piṟapava <span class="gaiji" data-anno="varuṣam">௵</span> cittirai <span class="gaiji" data-anno="mācam">௴</span> 13 <span class="gaiji" data-anno="tēti">௳</span> ca<span class="unclear" data-anno="unclear">ṉikkiḻa</span>ṉāḷ Uttira<span class="unclear" data-anno="unclear">kakṣi</span> tuvāteci riṣapalakkaṇaṭtil muṉi <span class="lb" lang="en" data-nobreak="" data-anno="line 6" data-n="6">␤</span>yappa<span class="unclear" data-anno="unclear (consonant_unclear)">ce</span>ṭṭiyār kumāraṉ laṣcumaṇaṉ kayy eḻuttu kācikāṇṭam eḻuti niṟaintu mu<span class="choice" data-anno="choice"><span class="orig" data-anno="original (regular: ṟṟu)">ttu</span></span>m
+</td>
+<td><a href="../mss/../../../mss/Indien_0332.xml">Indien 332</a></td>
+<td>
+BnF
+</td>
+<td>
+Kācikāṇṭam
+</td>
+</tr>
+<tr>
+<td>
+kācivicuvaṉāta-cuvāmiyār kiṟupā-kiṭāṣcattiṉālē Avaruṭai <span class="lb" lang="en" data-nobreak="" data-anno="line 6" data-n="6">␤</span>ya kātaiyākiya kācikāṇṭan tutaṅki – Eḻutivar 1739 – Āṇṭu vāykāci {mācam} 11 tēti kuruvāra-nāḷuñ cōti <span class="lb" lang="en" data-nobreak="" data-anno="line 7" data-n="7">␤</span>naṭcettiramum pakkan [<span lang="en" class="term ">i.e.</span> pakṣam?] tiṟaiyōteciyum riḻapa-mukirattamum [<span lang="en" class="term ">i.e.</span> riṣapa-mukurttam] Irāṣcata-vēḷaiyum [<span lang="en" class="term ">i.e.</span> irāṭcaca-vēḷai] ākiya puṇṇiya-tiṉattilē mutalāka muṟṟum
+</td>
+<td><a href="../mss/../../../mss/Indien_0333.xml">Indien 333</a></td>
+<td>
+BnF
+</td>
+<td>
+Kācikāṇṭam
+</td>
+</tr>
+<tr>
+<td>
+tuṉmu<span class="unclear" data-anno="unclear (vowel_unclear)">ki</span> {varuṣam} Āvaṇi {mācam} 8 {tēti} cukkiṟavāramumakālaṭcuminōṉpum Uttirāṭanaṭcattiramun tiṟaiyōteci piṟatōṭapuṇṇiyakālamuṅ kūṭiṉa <span class="pb" lang="en" data-n="p. 273v" data-anno="page 273v">␤</span> <span class="lb" lang="en" data-anno="line 1" data-n="1">␤</span>cupatiṉattilē cellamaṇipiḷḷaiyavarkaḷukku Upatēcakāṇṭam eḻuti niṟaiveṟiyatu muṟṟum <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span> Ivai Eḻutiṉa naṉmaikku tiruveṇṇainallūr tillaiyappa <span class="lb" lang="en" data-nobreak="" data-anno="line 2" data-n="2">␤</span>vāttiyār kumārar <span lang="en" class="gap" data-anno="gap of 3 characters (illegible)"><span>???</span></span> kūṭappākkam vāttiyār tampi Ampalavāṇavāttiyār kai Eḻuttu <span class="gaiji" data-anno="piḷḷaiyār cuḻi (short)">௳</span> Ivaiyi<span class="choice" data-anno="choice"><span class="unclear" data-anno="unclear">l i</span><span class="unclear" data-anno="unclear">l u</span></span>ruttirākkamāṉmiya varaikkum ceyyuḷ 712 <span class="gaiji" data-anno="piḷḷaiyār cuḻi (short)">௳</span> <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>nīkki ceyyuḷ 3621 Ampalavāṇavāttiyār kai Eḻuttu
+</td>
+<td><a href="../mss/../../../mss/Indien_0337.xml">Indien 337</a></td>
+<td>
+BnF
+</td>
+<td>
+Upatēcakāṇṭam
+</td>
+</tr>
+<tr>
+<td>
+1000 7 100 3 10 2m āṇṭu Āvaṇi {mācam} 2 10 8 {tēti} viyāḻa<del data-anno="deleted"><span lang="en" class="gap" data-anno="gap of 1 character (illegible)"><span>?</span></span></del> <span class="lb" lang="en" data-nobreak="" data-anno="line 5" data-n="5">␤</span>kkiḻamai pati<span class="choice" data-anno="choice"><span class="orig" data-anno="original (regular: ṉ)">n</span></span>oru maṇikku muṉṉē Eḻu <span class="lb" lang="en" data-nobreak="" data-anno="line 6" data-n="6">␤</span>ti muṭintutu <span class="gaiji" data-anno="piḷḷaiyār cuḻi (short)">௳</span> rōmāpuri cañciviṉāta-rā <span class="lb" lang="en" data-nobreak="" data-anno="line 7" data-n="7">␤</span>ca-riṣi-kuru-cuvāmi-y<span class="invisible">-</span>avarkaḷ Eḻuti vai <span class="lb" lang="en" data-nobreak="" data-anno="line 8" data-n="8">␤</span>tta pos·takam<span class="invisible">-</span>āvatu – mācillāmaṇi <span class="lb" lang="en" data-nobreak="" data-anno="line 9" data-n="9">␤</span>kumāraṉ muttuk kaiyeḻuttu
+</td>
+<td><a href="../mss/../../../mss/Indien_0339.xml">Indien 339</a></td>
+<td>
+BnF
+</td>
+<td>
+Kucalavarkaḷuṭaiya Katai
+</td>
+</tr>
+<tr>
+<td>
+vilampi {varuṣam} māci {mācam} 19 {tēti} caṉivāramum (pū)ca-naṭ(ca)ttiramum <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>c(ū)ṭiṉa puṟuvapaṭcattil vēṅkaṭācalan tirup <span class="lb" lang="en" data-nobreak="" data-anno="line 3" data-n="3">␤</span>pukaḻ tuvakkiyatu
+</td>
+<td><a href="../mss/../../../mss/Indien_0340.xml">Indien 340</a></td>
+<td>
+BnF
+</td>
+<td>
+Tiruppukaḻ
+</td>
+</tr>
+<tr>
+<td>
+caruvacitti {varuṣam} <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>kāṟtikai {mācam} 2 {tēti}
+</td>
+<td><a href="../mss/../../../mss/Indien_0357a.xml">Indien 357a</a></td>
+<td>
+BnF
+</td>
+<td>
+Kumaracatakam
+</td>
+</tr>
+<tr>
+<td>
+caṟuvacitti {varuṣam} māṟ <span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span>kaḻi {mācam} 2 {tēti} <span class="unclear" data-anno="unclear">ṉayarā</span>titta-vāramum <span class="lb" lang="en" data-anno="line 5" data-n="5">␤</span>tiṟayōtēciyum – vicāka-naṣcettira <span class="lb" lang="en" data-nobreak="" data-anno="line 6" data-n="6">␤</span>6 mum – yitu kūṭiṉa cu<span class="sic" data-anno="sic">paita</span>ṉattil
+</td>
+<td><a href="../mss/../../../mss/Indien_0357b.xml">Indien 357b</a></td>
+<td>
+BnF
+</td>
+<td>
+Maṇavāḷanārārayaṇacatakam
+</td>
+</tr>
+<tr>
+<td>
+malaiyappaṉ kai yeḻut=ta<span class="unclear" data-anno="unclear">tta</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0358.xml">Indien 358</a></td>
+<td>
+BnF
+</td>
+<td>
+Maṇavāḷanārārayaṇacatakam
+</td>
+</tr>
+<tr>
+<td>
+vicaiya {varuṣam} Āṭi {mācam} 2 {tēti} <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span><span class="choice" data-anno="choice"><span class="orig" data-anno="original (regular: pi)">pu</span></span>ḷḷaiyār akaval y<span class="invisible">-</span>e <span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span>ḻiti niṟavēttatu mut=tu<span class="bold" lang="sa">m</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0362.xml">Indien 362</a></td>
+<td>
+BnF
+</td>
+<td>
+MTM: 3 poems in praise of gods
+</td>
+</tr>
+<tr>
+<td>
+piṟapava {varuṣam} Āvaṇi {mācam} 2 {tēti} māṇikkavācakar piḷḷaittamiḻ eḻuti niṟavēṟiṉatu campūrṇam
+</td>
+<td><a href="../mss/../../../mss/Indien_0368.xml">Indien 368</a></td>
+<td>
+BnF
+</td>
+<td>
+Māṇikkavācakar Piḷḷaittamiḻ  
+</td>
+</tr>
+<tr>
+<td>
+Itu Eḻutiṉavaṉ kurumēṉi kāval tēvaṉuṭaip piccāṇṭa <span lang="en" class="gap" data-anno="gap of unknown (lost)"><span>…</span></span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0370.xml">Indien 370</a></td>
+<td>
+BnF
+</td>
+<td>
+Cuntarar Vēṭupaṟi
+</td>
+</tr>
+<tr>
+<td>
+caṟuvacitti {varuṣam} vaikā<span class="supplied lost" data-anno="supplied (lost)">ci</span> <span lang="en" class="gap" data-anno="gap (lost)"><span>…</span></span> <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>muṟṟu
+</td>
+<td><a href="../mss/../../../mss/Indien_0380.xml">Indien 380</a></td>
+<td>
+BnF
+</td>
+<td>
+MTM: 2 poems in praise of the Goddess    
+</td>
+</tr>
+<tr>
+<td>
+1000 8 100 2 10 8 m {varuṣam} ḻuliyēt=tu {mācam} 2 10 {tēti} Eḻuti muṭintatu
+</td>
+<td><a href="../mss/../../../mss/Indien_0412.xml">Indien 412</a></td>
+<td>
+BnF
+</td>
+<td>
+2 narratives: Pañcatantirakkatai &amp; Nālumantirikkatai         
+</td>
+</tr>
+<tr>
+<td>
+Itu Eḻutiṉatu piccāṇti
+</td>
+<td><a href="../mss/../../../mss/Indien_0414.xml">Indien 414</a></td>
+<td>
+BnF
+</td>
+<td>
+Pañcatantirakkatai
+</td>
+</tr>
+<tr>
+<td>
+vikā<span class="orig" data-anno="original">ṟi</span> {varuṣam} tai {mācam} 2 10 5 {tēti} <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>putuvaik=k<span class="invisible">’</span> aṭut=ta <span class="placename" data-anno="place name">nellitō <span class="lb" lang="en" data-nobreak="" data-anno="line 3" data-n="3">␤</span>ppil</span> irukkum <span class="persname" data-anno="person name">cak=karai-paṭai <span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span>yācci</span> y<span class="invisible">-</span>eḻutuka<span class="choice" data-anno="choice"><span class="unclear" data-anno="unclear">ṟ</span><span class="unclear" data-anno="unclear">ṟa</span></span> cuvaṭi <span class="lb" lang="en" data-anno="line 5" data-n="5">␤</span>y<span class="invisible">-</span>eṉṉa v<span class="invisible">-</span>eṉṟāl – vīra-cūra <span class="lb" lang="en" data-nobreak="" data-anno="line 6" data-n="6">␤</span><span data-anno="title">vikkiṟa<span class="sic" data-anno="sic">mmā</span>tittaṉ katai</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0423.xml">Indien 423</a></td>
+<td>
+BnF
+</td>
+<td>
+Vikkiramārkaṉ Katai 
+</td>
+</tr>
+<tr>
+<td>
+maṉmata {varuṣam} Āṉi {mācam} 10 7 {tēti} maṅkaḷavārat=til <span class="placename" data-anno="place name">kāṇiyāmpāk=kam</span>mutalippi<span class="supplied omitted" data-anno="supplied (omitted)">ḷ</span>ḷai citamparaṉāta-mutaliyār kumāṟaṉ mutalippi<span class="supplied omitted" data-anno="supplied (omitted)">ḷ</span>ḷai Appu Int=a muppat=tu reṇṭu kataiyu<span class="bold" lang="sa">=m</span> Eḻuti mutin=tatu mu<span class="sic" data-anno="sic">t=tu</span>m
+</td>
+<td><a href="../mss/../../../mss/Indien_0424.xml">Indien 424</a></td>
+<td>
+BnF
+</td>
+<td>
+Vikkiramārkaṉ Katai
+</td>
+</tr>
+<tr>
+<td>
+1000 7 100 10 2 {varuṣam} cellum vai <span class="lb" lang="en" data-nobreak="" data-anno="line 3" data-n="3">␤</span>yyāci mā<del data-anno="deleted"><span lang="en" class="gap" data-anno="gap of 1 character (illegible)"><span>?</span></span></del>cam 8 {tēti} yilē <span class="lb" lang="en" data-anno="line 4" data-n="4">␤</span>Aṟciṣta-viviliya-postaka<span class="supplied omitted" data-anno="supplied (omitted)">m</span> <span class="lb" lang="en" data-anno="line 5" data-n="5">␤</span>Eḻuti muṭintutu pañcaṉa piṟakā <span class="lb" lang="en" data-nobreak="" data-anno="line 6" data-n="6">␤</span>caṉa <del data-anno="deleted">tai</del> Eḻutiṉatu +
+</td>
+<td><a href="../mss/../../../mss/Indien_0450.xml">Indien 450</a></td>
+<td>
+BnF
+</td>
+<td>
+Callāpam
+</td>
+</tr>
+<tr>
+<td>
+caṟvēcuraṉu <span class="lb" lang="en" data-nobreak="" data-anno="line 3" data-n="3">␤</span>kku-y istottiram<span class="invisible">-</span>āka tevutteroṉomiyo <span lang="en" class="note
+ inline" data-anno="note
+ ">i.e. Deuteronomy</span> v<span class="invisible">-</span>eṉkiṟa moyaṣ=cecu-v-uṭaiya Añc-āvatu posta <span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span>kam | 1000 6 100 6 10 6 | {varuṣam/āṇṭu} cellum | puraṭṭāci {mācam} | 2 10 8 {tēti} | piṟitt<span class="invisible">’</span> eḻuti muṭintutu muṟṟum
+</td>
+<td><a href="../mss/../../../mss/Indien_0451.xml">Indien 451</a></td>
+<td>
+BnF
+</td>
+<td>
+Callāpam
+</td>
+</tr>
+<tr>
+<td>
+rāyar<span class="invisible">-</span>uṭaiya reṇṭ<span class="invisible">-</span>āvatu postakam | 1000 6 100 6 10 6 {varuṣam} cellum | kārti <span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span>kai {mācam} 5 {tēti} muṭintutu muṟṟum
+</td>
+<td><a href="../mss/../../../mss/Indien_0452.xml">Indien 452</a></td>
+<td>
+BnF
+</td>
+<td>
+Callāpam
+</td>
+</tr>
+<tr>
+<td>
+y<span class="invisible">-</span>eḻuti niṟaveṟṟiṉōm · 1000 6 100 <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span> 6 10 7 {varuṣam} c-cellum māci {mācam} 8 {tēti} · muṭintutu muṟṟum
+</td>
+<td><a href="../mss/../../../mss/Indien_0453.xml">Indien 453</a></td>
+<td>
+BnF
+</td>
+<td>
+Callāpam
+</td>
+</tr>
+<tr>
+<td>
+yecukkiṟīsttu cuvāmiyiṉ cīṣaṉākiya Aposttalanuñ cuvicēṣa kaṉum āyirunta Aṟceyaciṣṭṭa mattēyi y<span class="invisible">-</span>eṉpavar eḻuti vaitta cuvicē <span class="lb" lang="en" data-nobreak="" data-anno="line 2" data-n="2">␤</span>ṣattākamam = tēvacutaṉanar Avatāram eṭuttu meyp pōtakam paṇṇi Ataiyaṟ putaṅkaḷiṉālum mācaṟṟan aṭa kaṭaiyiṉālum aruppittu lōka <span class="lb" lang="en" data-nobreak="" data-anno="line 3" data-n="3">␤</span>ttiṉ pāvattukkut tammai yuttiravātap peliyiṭṭa piṉ cīvoṟ pattiyar tiruccapaiyai yippūv ulakil isttāpittu moṣcattuk keḻuntaru <span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span> ḷip pōṉatu Atilē Aṭakkam <span class="lb" lang="en" data-anno="line 5" data-n="5">␤</span>mūṉṟām patittal <span class="lb" lang="en" data-anno="line 6" data-n="6">␤</span>taraṅkaṉpāṭi kiṟīsttup piṟantu 1000 7 100 39 {varuṣa}m ākiṟa pōtu
+</td>
+<td><a href="../mss/../../../mss/Indien_0456.xml">Indien 456</a></td>
+<td>
+BnF
+</td>
+<td>
+Gospel of Matthew
+</td>
+</tr>
+<tr>
+<td>
+Inta postakaṅ kaṟtaṉ maṉuṣavatāram paṇṇi ma <span class="lb" lang="en" data-nobreak="" data-anno="line 6" data-n="6">␤</span>ṉuṣaṉāy piṟanta 1000 6 100 7 10 7 <span class="gaiji" data-anno="varuṣam">௵</span> Āṭi <span class="gaiji" data-anno="mācam">௴</span> 7 {tēti} <span class="lb" lang="en" data-anno="line 7" data-n="7">␤</span>Eḻuti mukintatu muṟṟum
+</td>
+<td><a href="../mss/../../../mss/Indien_0460.xml">Indien 460</a></td>
+<td>
+BnF
+</td>
+<td>
+Ñāṉōpatēcam, Kāṇṭam 3 = Nobili's Catechism, Part 3
+</td>
+</tr>
+<tr>
+<td>
+pava {varuṣam} Āṭi {mācam} 2 10 {tēti} <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>cavarirāyaṉ tirukkāvalūr <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>kalampakan tuvakkam
+</td>
+<td><a href="../mss/../../../mss/Indien_0477.xml">Indien 477</a></td>
+<td>
+BnF
+</td>
+<td>
+Tirukkāvalūr Kalampakam
+</td>
+</tr>
+<tr>
+<td>
+lutterukalvīṉumaṟṟavinnāṭa patitā coṉṉa tappa <span class="lb" lang="en" data-nobreak="" data-anno="line 22" data-n="22">␤</span>ṟai yoḻiyavum yecunātar tanta cattiya-vētam viḷa <span class="lb" lang="en" data-nobreak="" data-anno="line 23" data-n="23">␤</span>ṅkavum naṉṉeṟi vaḻuvātaṉai varu<span class="unclear" data-anno="unclear (vowel_unclear)">mi</span> māḻukip paramakati <span class="lb" lang="en" data-nobreak="" data-anno="line 24" data-n="24">␤</span>yai-c ceravum vētaviḷakkam<span class="invisible">-</span>āka vittal nāṭarāy <span class="lb" lang="en" data-anno="line 25" data-n="25">␤</span>ṟomāṉ tiru-c-capai-c caṉṉiyāciyār<span class="invisible">-</span>āy-k kāraṇa-ku <span class="pb" lang="en" data-n="p. 153v" data-anno="page 153v">␤</span> <span class="lb" lang="en" data-nobreak="" data-anno="line 1" data-n="1">␤</span>ru-v<span class="invisible">-</span>ākiya tayiriya-nāta-rāca-riṣi-kuru-cuvāmi-y<span class="invisible">-</span>avarkaḷ kārtā <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>tiru-v-avatārañ ceytu 1000 7 100 2 10 8-m āṇṭil kīlaka {varuṣam} vai <span class="lb" lang="en" data-nobreak="" data-anno="line 3" data-n="3">␤</span>kāci {mācam} 2 10 5 {tēti} y<span class="invisible">-</span>elākuṟicci-maṭattil mūvāyi <span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span>rattu nāṉūṟṟup paṇṇiru kirantatt<span class="invisible">’</span> aḷavoṭu tanta payaṉ <span class="lb" lang="en" data-nobreak="" data-anno="line 5" data-n="5">␤</span>Ellārukkum naṉṟāka-v eḻuti mukintatu muṟṟum <span lang="en" class="term ">{symbol}</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0481.xml">Indien 481</a></td>
+<td>
+BnF
+</td>
+<td>
+Vētaviḷakkam
+</td>
+</tr>
+<tr>
+<td>
+Inta-p postakaṅ kaṟtā maṉuṣavatāram paṇ <span class="lb" lang="en" data-nobreak="" data-anno="line 15" data-n="15">␤</span>ṇi 1000 7 100 2 10 9 Āṇṭu Oyittemparu <span class="gaiji" data-anno="mācam">௴</span> 2 10 2 {tēti} <span class="lb" lang="en" data-nobreak="" data-anno="line 16" data-n="16">␤</span>kku <span class="choice" data-anno="choice"><span class="sic" data-anno="sic (corrected: ce)">co</span></span>llum cavumiya <span class="gaiji" data-anno="varuṣam">௵</span> Aṟpaci <span class="gaiji" data-anno="mācam">௴</span> 10 {tēti} <span class="lb" lang="en" data-anno="line 17" data-n="17">␤</span>caṉikkiḻamai mantira-viyākkiyāṉam eṉṟu <span class="lb" lang="en" data-anno="line 18" data-n="18">␤</span>m postakam eḻuti <span class="lb" lang="en" data-anno="line 20" data-n="20">␤</span>mukintutu
+</td>
+<td><a href="../mss/../../../mss/Indien_0483.xml">Indien 483</a></td>
+<td>
+BnF
+</td>
+<td>
+Ñāṉōpatēcam Kāṇṭam 4 = Nobili's Catechism, Part 4
+</td>
+</tr>
+<tr>
+<td>
+<span class="placename" data-anno="place name">rāyapura</span>ttil irukkum <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>mayilai ciṉṉa tampi mutali <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>yār kumarat=ti yar kula <span class="lb" lang="en" data-anno="line 4" data-n="4">␤</span>Ammāḷp paṭikkiṟa <span class="lb" lang="en" data-anno="line 5" data-n="5">␤</span>Alaiciyammā<del data-anno="deleted"><span lang="en" class="gap" data-anno="gap (illegible)"><span>…</span></span></del>ṉai <span class="lb" lang="en" data-anno="line 6" data-n="6">␤</span>y<span class="invisible">-</span>eṭuttavarkaḷ kuṭukka vēṇu <span class="lb" lang="en" data-anno="line 7" data-n="7">␤</span>m
+</td>
+<td><a href="../mss/../../../mss/Indien_0484.xml">Indien 484</a></td>
+<td>
+BnF
+</td>
+<td>
+Alacu Ammāṉai
+</td>
+</tr>
+<tr>
+<td>
+1000 8 100 3 10 8 {varuṣam} navampar {mācam} 21 {tēti} Iṟāyapuratti <span class="lb" lang="en" data-nobreak="" data-anno="line 2" data-n="2">␤</span>l irukkum ciṉṉat tampi mutaliyār kumāratti <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>Ammaṇiyammāḷ viyākulam Ivarkaḷ iraṇṭu pē <span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span>rum vācikkiṉṟa Alacu Ammāṉai y<span class="invisible">-</span>eḻuti niṟaintutu <span class="lb" lang="en" data-anno="line 5" data-n="5">␤</span>Ippaṭik=ki ~ Ā ~ Āṟokkiya=m kai y<span class="invisible">-</span>eḻuttu
+</td>
+<td><a href="../mss/../../../mss/Indien_0484.xml">Indien 484</a></td>
+<td>
+BnF
+</td>
+<td>
+Alacu Ammāṉai
+</td>
+</tr>
+<tr>
+<td>
+<span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> parābhava-nāmā-saṃva <span class="lb" lang="en" data-nobreak="" data-anno="line 22" data-n="22">␤</span>t·sare si<span lang="en" class="gap" data-anno="gap of 1 character (illegible)"><span>?</span></span>-māse kṛṣṇa-pakṣe dvitiyāyāṃ tithau sa<span class="choice" data-anno="choice"><span class="unclear" data-anno="unclear">vyā</span><span class="unclear" data-anno="unclear">khyā</span></span>khyānam etat· <span class="lb" lang="en" data-anno="line 23" data-n="23">␤</span> <span lang="en" class="gap ellipsis" data-anno="gap (ellipsis)"><span>…</span></span> nāgapure vasataḥ rāmasvāmi-śāstriṇaḥ sva-hasta-likhitaṃ saṃpūrṇāṃ –
+</td>
+<td><a href="../mss/../../../mss/Indien_0500.xml">Indien 500</a></td>
+<td>
+BnF
+</td>
+<td>
+Saundaryalaharīvyākhyāna
+</td>
+</tr>
+<tr>
+<td>
+caṟuvacitti {varuṣam} paṅkuṉi {mācam} 2 10 {tēti} puṟuvapaṭcam Aṣṭṭami viyāḻakkiḻamai ṉāḷ <span class="persname" data-anno="person name">kumarappaṉ</span> Eḻutiṉa tiru-v<span class="invisible">-</span>ayōtti<span class="supplied omitted" data-anno="supplied (omitted)">ya</span>-kāṇṭamuṟṟu<span class="bold" lang="sa">=m</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0946.xml">Indien 946</a></td>
+<td>
+BnF
+</td>
+<td>
+Kamparāmāyaṇam    
+</td>
+</tr>
+<tr>
+<td>
+nantaṉa {varuṣam} paṅkuṉi {mācam} 5 {tēti} Ātittavāramum pañcamiyuṅ Āṣanaṭcattiramun kūṭiṉa <span class="lb" lang="en" data-anno="line 5" data-n="5">␤</span>puṇṇiyatiṉattilē śrīma<span class="unclear" data-anno="unclear">tti</span> rāmāyaṇam eḻutat tuvakiṉatu <span class="gaiji" data-anno="piḷḷaiyār cuḻi (short)">௳</span> <span class="lb" lang="en" data-anno="line 6" data-n="6">␤</span>nantaṉa {varuṣam} māci {mācam} 2 10 {tēti} Ātit<span class="supplied lost" data-anno="supplied (lost)">tavā</span>raṉāḷ Aṇuṣanaścattiram
+</td>
+<td><a href="../mss/../../../mss/Indien_0951.xml">Indien 951</a></td>
+<td>
+BnF
+</td>
+<td>
+Kamparāmāyaṇam
+</td>
+</tr>
+<tr>
+<td>
+ceya {varuṣam} vaikāci {mācam} 2 10 7 cōmavāramum pañcamiyuṅ kūṭiṉa puṇṇiyatiṉattilē śrīmatti-rāmāyaṇam y-eḻuti mu <span class="lb" lang="en" data-nobreak="" data-anno="line 3" data-n="3">␤</span>kintatu
+</td>
+<td><a href="../mss/../../../mss/Indien_0951.xml">Indien 951</a></td>
+<td>
+BnF
+</td>
+<td>
+Kamparāmāyaṇam
+</td>
+</tr>
+<tr>
+<td>
+piṟamāti <span class="gaiji" data-anno="varuṣam">௵</span> kart=tikai <span class="gaiji" data-anno="mācam">௴</span> 2 10 7 {tēti} vātavūrppūṟāṇa<span class="bold" lang="sa">m•</span> y<span class="invisible">-</span>eḻuti <span class="unclear" data-anno="unclear">ni</span>ṟaintu muṟṟu<span class="bold" lang="sa">m•</span>
+</td>
+<td><a href="../mss/../../../mss/Indien_0954.xml">Indien 954</a></td>
+<td>
+BnF
+</td>
+<td>
+Vātavūrppurāṇam 
+</td>
+</tr>
+<tr>
+<td>
+tirukkōvalūr kuḻantai<span class="unclear" data-anno="unclear">yāṉai</span> kumāraṉ kuppa m<span class="unclear" data-anno="unclear">t=tu</span> y-eḻuti niṟain=tu muttum
+</td>
+<td><a href="../mss/../../../mss/Indien_0954.xml">Indien 954</a></td>
+<td>
+BnF
+</td>
+<td>
+Vātavūrppurāṇam 
+</td>
+</tr>
+<tr>
+<td>
+kara {varuṣam} paṅkuṉi {mācam} 5 {tēti} y<span class="invisible">-</span>eḻutiyatu
+</td>
+<td><a href="../mss/../../../mss/Indien_0962.xml">Indien 962</a></td>
+<td>
+BnF
+</td>
+<td>
+Veṅkaikkōvai 
+</td>
+</tr>
+<tr>
+<td>
+1 8 100 3 10 – m – Āṇṭu <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>kāraikkālil eḻuta <span class="lb" lang="en" data-nobreak="" data-anno="line 3" data-n="3">␤</span>ppaṭṭutu
+</td>
+<td><a href="../mss/../../../mss/Indien_0993.xml">Indien 993</a></td>
+<td>
+BnF
+</td>
+<td>
+Cippāyika Vāttu Varicai Paḻakkuṟa Poṣttakam
+</td>
+</tr>
+<tr>
+<td>
+virodhi-nāma-saṃvatsaraṃ kanyāmāsaṃ dvitīyya-dinaṃ saumyavāsaraṃ kṛṣṇapakṣaṃ caturthi aśvinīnakṣatram inda śubhadinattil divi pañcaviṃśatighaṭikayil vedaṃ saṃhītāpustakaṃ kṛṣṇan· <span class="lb" lang="en" data-anno="line 3" data-n="3">␤</span>lekhiri Āraṃbhiccadu
+</td>
+<td><a href="../mss/../../../mss/Sanscrit_0290.xml">Sanscrit 290</a></td>
+<td>
+BnF
+</td>
+<td>
+Yajurveda Taittirīyasaṃhitā
+</td>
+</tr>
+<tr>
+<td>
+virodhi-nāma-saṃvatsaraṃ tulāmāsa<del data-anno="deleted"><span lang="en" class="gap" data-anno="gap of 3 characters (illegible)"><span>???</span></span></del><ins class="add" data-anno="inserted">m ekona</ins>triṃśad dinaṃ guruvaraṃ kṛṣṇapakśaṃ dvitīyyai rohiṇīnakṣatrattil Idaṃ vedaṃ samhītāpustakaṃ sura<span class="unclear" data-anno="unclear">khra</span>ḍhi kṛṣṇan· sva <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>hastattunāl samāptamānadu
+</td>
+<td><a href="../mss/../../../mss/Sanscrit_0290.xml">Sanscrit 290</a></td>
+<td>
+BnF
+</td>
+<td>
+Yajurveda Taittirīyasaṃhitā
+</td>
+</tr>
+<tr>
+<td>
+1644 || ৽ || likhitaṃ bahuyatnena yas corayati pustakaṃ | vānarī tasya mātā ca janakas tasya <span class="unclear" data-anno="unclear">ga</span>rddabhaḥ || śrīdurgā jayati || ৽ ||
+</td>
+<td><a href="../mss/../../../mss/Sanscrit_0549_3.xml">Sanscrit 549.3</a></td>
+<td>
+BnF
+</td>
+<td>
+Amarakośa with marginal commentary
+</td>
+</tr>
+<tr>
+<td>
+<span class="unclear" data-anno="unclear">śrī</span>dūrgāyai namaḥ | namaḥ śrīgurave namaḥ || <span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>śubham astu sadā <span class="unclear" data-anno="unclear">veśyake</span> || <span class="unclear" data-anno="unclear">vasvestvaṅga</span>mite śāke daśamyāṃ śuklamāsake | alekhī<span class="unclear" data-anno="unclear">n nu dine śvaṣṭha</span>govarddhanena pustakaṃ || natvā <span class="unclear" data-anno="unclear">gotravarātmajasvasṛpadās teje svayaṃ kāmadaṃ grantho 'yaṃ nibhṛtaṃ vyalekhi bheṣajyadhīre naṭīkāyataḥ |</span> aṅgā-<span class="lb" lang="en" data-nobreak="" data-anno="line 3" data-n="3">␤</span>kāśarasendubhiḥ parimite śāke daśamyān tithau jyaiṣṭhe māsi svadhākarasya divase govarddhaneṇa dutaṃ ||
+</td>
+<td><a href="../mss/../../../mss/Sanscrit_0612_1.xml">Sanscrit 612.1</a></td>
+<td>
+BnF
+</td>
+<td>
+Amarakośa with anonymous commentaries
+</td>
+</tr>
+<tr>
+<td>
+iti śrīrāyagovindaśarmmaṇaḥ pustakam idaṃ śrīraghunandanaśarmmaṇaḥ akṣaraṃ — || śubam astu śakābdāḥ 1648 <span class="unclear" data-anno="unclear">śrīmuvāri</span>śarmmaṇā paṭhitam etat ||
+</td>
+<td><a href="../mss/../../../mss/Sanscrit_0619.xml">Sanscrit 619</a></td>
+<td>
+BnF
+</td>
+<td>
+Amarakośakaumudī
+</td>
+</tr>
+<tr>
+<td>
+<span class="lb" lang="en" data-anno="line 2" data-n="2">␤</span>oṁ tat sat || ॰ || iti tārika 5 āśvina sana 1273 sāla || śubhaṃ bhūyāt || sākṣaram idaṃ rādhācaraṇamiśrasya || ॰ ||
+</td>
+<td><a href="../mss/../../../mss/Sanscrit_0814.xml">Sanscrit 814</a></td>
+<td>
+BnF
+</td>
+<td>
+Bālambhaṭṭī
+</td>
+</tr>
+<tr>
+<td>
+<span class="lb" lang="en" data-anno="line 10" data-n="10">␤</span>haraḥ om <span class="gaiji aalt" data-anno="piḷḷaiyār cuḻi (long)">௳</span> śubham astu <span class="gaiji" data-anno="piḷḷaiyār cuḻi (short)">௳</span>
+</td>
+<td><a href="../mss/../../../mss/Sanscrit_0831.xml">Sanscrit 831</a></td>
+<td>
+BnF
+</td>
+<td>
+Śivajñānabodhalaghuṭīkā
+</td>
+</tr>
+<tr>
+<td>
+<span class="milestone biggap" lang="en" data-loc="18" data-anno="image 18">page 10, ln 9</span>Copy prepared from the Benares edition of 1887 C.E. <span class="lb" lang="en" data-anno="line 10" data-n="10">␤</span>by Umraosingh Sher-Gil. in Paris. 17th March 1930. <span lang="sa" class="term ">oṁ śauṃ</span>
+</td>
+<td><a href="../mss/../../../mss/Sanscrit_1145.xml">Sanscrit 1145</a></td>
+<td>
+BnF
+</td>
+<td>
+Pāṇinīyaśikṣā
+</td>
+</tr>
+<tr>
+<td>
+<span class="milestone biggap" lang="en" data-loc="54" data-anno="image 54">folio 26r1</span>śrīkṛṣṇārpaṇam astu || - || hariḥ oṃ || samā<span class="lb" lang="en" data-nobreak="" data-anno="line beginning" data-n="">␤</span>ptaś cāyaṃ graṃthaḥ || | - || ❈ || - || śrīvedavyāsāya namaḥ || śrīhayagrīvāya namaḥ || - ||
+</td>
+<td><a href="../mss/../../../mss/Sanscrit_1146.xml">Sanscrit 1146</a></td>
+<td>
+BnF
+</td>
+<td>
+Brahmasūtra
+</td>
+</tr>
+<tr>
+<td>
+<span class="milestone biggap" lang="en" data-loc="4" data-anno="image 4">folio 128r5</span>oṁ gurave namaḥ || ❈ || śrīśrīrādhākṛṣṇābhyāṃ namaḥ— || ❈ ||–❈–|| likhitā śrīrādhākāntaśarmmaṇā || ❈ ||–❈–|| oṁ gopālāya namaḥ— |
+</td>
+<td><a href="../mss/../../../mss/Sanscrit_1406.xml">Sanscrit 1406</a></td>
+<td>
+BnF
+</td>
+<td>
+Vivādārṇavasetu
+</td>
+</tr>
+<tr>
+<td>
+śakābdā 1742 <span class="unclear" data-anno="unclear">jyaiṣṭhe</span> ||
+</td>
+<td><a href="../mss/../../../mss/Sanscrit_1426.xml">Sanscrit 1426</a></td>
+<td>
+BnF
+</td>
+<td>
+Three Vaiṣṇava hymns
+</td>
+</tr>
+<tr>
+<td>
+<span class="milestone biggap" lang="en" data-loc="457" data-anno="image 457">folio 442r</span>ye dharmmā hetuprabhāvā he<span class="lb" lang="en" data-nobreak="" data-anno="line 2" data-n="2">␤</span>tun teṣāṃ tathāgataḥ | hy avadat teṣāṃ ca yo nirodhaḥ evaṃvādī mahāśravaṇaḥ || yaḥ śṛṇoti mune dharmmaṃ śrutvā cābhiniveśati | sarvapāpaṃ vinimukto sū gacchati su<span class="lb" lang="en" data-nobreak="" data-anno="line 3" data-n="3">␤</span>khāvatīṃ || śrotavyaṃ śraddhayā tasmāt sugatsyāyaṃ subhāṣitaṃ | nānāvidarśanais tais taiḥ jinena bhāṣitaḥ purā || so yaṃ subhāṣito bhaktyā sugatasyānubhā<metamark xmlns="http://www.tei-c.org/ns/1.0" function="line filler">≡</metamark><span class="lb" lang="en" data-nobreak="" data-anno="line 4" data-n="4">␤</span>ṣitaḥ | mayā saṃpūrṇṇalikhitaṃ kaivalyavatmadeśakaḥ || ato yat mama puṇo na sarvakilviṣanāśanaṃ | apāyadvāranāśārhaṃ bodhimārgopadeśakaṃ || tena <span class="lb" lang="en" data-anno="line 5" data-n="5">␤</span>puṇyānubhāvena sarvabhūtāni sarvaśaḥ || sarvakleśavinimuktā prayāntu hi sukhāvatīṃ || ye satvā andhā kāṇāṃ ca tathā kubjā vicitratā | anye pipāsitā kṣu<span class="lb" lang="en" data-nobreak="" data-anno="line 6" data-n="6">␤</span>ddhāḥ sarvaduḥkhanipīḍitāḥ || tena pu<span class="sic" data-anno="sic">ṇyāna</span> te sarve bhavet sukhasamanvitāḥ | vividhā bhogasaṃbhuktā labhantu mokṣam avyayaṃ || ṣaṭsu gatīṣu ye satvāḥ magnā <span class="lb" lang="en" data-anno="line 7" data-n="7">␤</span>jātijalākula | te sarve mama puṇyena bhavantu bodhimārgagāḥ || ye satvāḥ vārajātīye saddharmeṇa vivarjitāḥ | pāpeṣu <span class="unclear" data-anno="unclear">śa</span>tato <span class="unclear" data-anno="unclear">śa</span>ktvāḥ rāgadveṣeṇa mo<span class="lb" lang="en" data-nobreak="" data-anno="line 8" data-n="8">␤</span>hitā || te sarve mama puṇyena bhūyo jātismarās sadā | dānaśīlādisaṃyuktā carantu bodhicārakāṃ || rājā bhavattu kṣemāvān_ carantu mantriṇo naye | vīrā <span class="lb" lang="en" data-anno="line 9" data-n="9">␤</span>bhavattu satataṃ saṃgrāme jitaśatrave || kāle varṣantu meghāś ca śasyapūrṇṇo mahī sadā || etan me praṇidhānena yat puṇyaṃ jāyate śubhaṃ || tena puṇyānubhā<span class="lb" lang="en" data-nobreak="" data-anno="line 10" data-n="10">␤</span>vena bhaveyaṃ bodhipāragāḥ || saṃsārārṇṇavatīrṇṇāya dehināṃ kuśalāya ca || ❈ || || śubham astu sarvadā || ❈ ||
+</td>
+<td><a href="../mss/../../../mss/Sanscrit_1544.xml">Sanscrit 1544</a></td>
+<td>
+BnF
+</td>
+<td>
+Mahāvastu
+</td>
+</tr>
+</tbody>
+            </table>
+        </section>
+    </article>
+   
+   <script type="text/javascript">
+      document.querySelector('table').addEventListener('mouseover',docMouseover);
+   </script>
+
+</body></html>

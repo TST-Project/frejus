@@ -1,0 +1,231 @@
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+                xmlns:x="https://ead3.archivists.org/schema/"
+                exclude-result-prefixes="x">
+<xsl:output method="html" omit-xml-declaration="yes" indent="yes"/>
+
+
+<xsl:template match="x:eadid"/>
+
+<xsl:template match="x:titlestmt">
+    <xsl:element name="img">
+        <xsl:attribute name="class">editbutton</xsl:attribute>
+        <xsl:attribute name="id">headeredit</xsl:attribute>
+        <xsl:attribute name="src">edit_icon.svg</xsl:attribute>
+    </xsl:element>
+    <h1><xsl:apply-templates select="x:titleproper"/></h1>
+</xsl:template>
+
+<xsl:template match="x:c">
+     <xsl:element name="img">
+        <xsl:attribute name="class">editbutton</xsl:attribute>
+        <xsl:attribute name="id">headeredit</xsl:attribute>
+        <xsl:attribute name="src">edit_icon.svg</xsl:attribute>
+    </xsl:element>
+    <h1><xsl:apply-templates select="//x:unitid"/>. <xsl:apply-templates select="//x:unittitle"/></h1>
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="x:publicationstmt"/>
+
+<xsl:template match="x:profiledesc" />
+<xsl:template match="x:revisiondesc" />
+
+<xsl:template match="x:archdesc">
+    <xsl:apply-templates />
+</xsl:template>
+
+<xsl:template match="x:did">
+    <p><span class="heading">Cote : </span> <xsl:apply-templates select="x:unitid[@type='cote']"/><xsl:text> </xsl:text></p>
+    <p><span class="heading">Ancienne cote : </span> <xsl:apply-templates select="x:unitid[@type='ancienne cote']"/></p>
+    <p><span class="heading"><xsl:apply-templates select="x:unittitle"/></span></p>
+    <p><xsl:apply-templates select="x:langmaterial"/></p>
+    <p><xsl:apply-templates select="x:unitdate"/></p>
+    <p><xsl:apply-templates select="x:physdesc"/></p>
+    <!--
+        <xsl:apply-templates select="x:physdesc/x:geogname"/>
+        <xsl:apply-templates select="x:physdesc/x:physfacet[@type='support']"/>
+        <xsl:apply-templates select="x:physdesc/x:physfacet[@type='conditionnement']"/>
+        <xsl:apply-templates select="x:physdesc/x:extent"/>
+        <xsl:apply-templates select="x:physdesc/x:dimensions"/>
+        <xsl:apply-templates select="x:physdesc/x:physfacet[@type='ecriture']"/>
+        <xsl:apply-templates select="x:physdesc/x:physfacet[@type='reliure']"/>
+        <xsl:apply-templates select="x:physdesc/x:physfacet[@type='codicologie']"/>
+        <xsl:apply-templates select="x:physdesc/x:physfacet[@type='marginalia']"/>
+        <xsl:apply-templates select="x:physdesc/x:physfacet[@type='autre']"/>
+    -->
+    <p><xsl:apply-templates select="x:repository"/></p>
+</xsl:template>
+
+<xsl:template match="x:unittitle/x:title">
+    <xsl:apply-templates/>
+</xsl:template>
+<xsl:template match="x:unittitle/x:persname">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="x:physfacet">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="x:extent">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="x:dimensions">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="x:geogname">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="x:language">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="x:scopecontent">
+    <h3>Présentation du contenu</h3>
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="x:scopecontent/x:p[@id='shortdesc']">
+    <xsl:if test="normalize-space(.) != ''">
+        <p><xsl:apply-templates /></p>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="x:scopecontent/x:p[@id='othertestimonies']">
+    <xsl:if test="normalize-space(.) != ''">
+        <p><xsl:apply-templates /></p>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="x:scopecontent/x:p[@id='contents']">
+    <xsl:if test="normalize-space(.) != ''">
+        <p><xsl:apply-templates /></p>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="x:scopecontent/x:p[@id='completeness']">
+    <xsl:if test="normalize-space(.) != ''">
+        <p><xsl:apply-templates /></p>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="x:scopecontent/x:p[@id='excerpts']">
+    <xsl:if test="normalize-space(.) != ''">
+        <p><xsl:apply-templates /></p>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="x:scopecontent/x:p[@id='abbreviations']">
+    <xsl:if test="normalize-space(.) != ''">
+        <p><xsl:apply-templates /></p>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="x:scopecontent/x:p[@id='transliteration']">
+    <xsl:if test="normalize-space(.) != ''">
+        <p><xsl:apply-templates /></p>
+    </xsl:if>
+</xsl:template>
+
+<xsl:variable name="langs">
+    <lang name="san">Sanskrit</lang>
+    <lang name="pra">Prakrit</lang>
+    <lang name="hin">Hindi</lang>
+    <lang name="guj">Gujarati</lang>
+</xsl:variable>
+
+<xsl:template name="splitLang">
+    <xsl:param name="langs"/>
+    <xsl:if test="string-length($langs)">
+        <xsl:variable name="langstr" select="substring-before(concat($langs,' '),' ')"/>
+        <xsl:for-each select="document('')/xsl:stylesheet/xsl:variable[@name='langs']/*">
+            <xsl:if test="@name = $langstr">
+                <xsl:value-of select= "."/>
+                <xsl:text>. </xsl:text>
+            </xsl:if>
+        </xsl:for-each>
+        <xsl:call-template name="splitLang">
+            <xsl:with-param name="langs" select="substring-after($langs, ' ')"/>
+        </xsl:call-template>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="x:corpname">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="x:altformavail"/>
+<xsl:template match="x:dao" />
+
+<xsl:template match="x:bibliography">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="x:bibref">
+    <xsl:element name="p">
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+
+<xsl:template match="x:acqinfo">
+    <h3>Informations sur les modalité d'entrée</h3>
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="x:processinfo">
+    <h3>Informations sur le traitement</h3>
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="x:persname">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="x:address">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="x:p">
+    <p>
+        <xsl:apply-templates/>
+    </p>
+</xsl:template>
+
+<xsl:template match="x:emph[@render='bold']">
+    <strong>
+        <xsl:apply-templates/>
+    </strong>
+</xsl:template>
+
+<xsl:template match="x:emph[@render='italic']">
+    <em>
+        <xsl:apply-templates/>
+    </em>
+</xsl:template>
+
+<xsl:template match="x:blockquote">
+    <blockquote>
+        <xsl:apply-templates/>
+    </blockquote>
+</xsl:template>
+
+<xsl:template match="x:blockquote/x:p">
+    <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="x:lb">
+    <xsl:element name="br"/>
+</xsl:template>
+
+<xsl:template match="x:extref">
+    <xsl:element name="a">
+        <xsl:attribute name="href"><xsl:value-of select="@href"/></xsl:attribute>
+        <xsl:apply-templates/>
+    </xsl:element>
+</xsl:template>
+
+</xsl:stylesheet>
+

@@ -1,0 +1,15 @@
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+                xmlns:x="http://www.tei-c.org/ns/1.0"
+                xmlns:my="https://github.com/chchch/tst"
+                exclude-result-prefixes="x my">
+<xsl:output method="html" encoding="UTF-8" omit-xml-declaration="yes"/>
+
+<xsl:template match="x:TEI">
+    <xsl:element name="div">
+        <xsl:attribute name="id">recordcontainer</xsl:attribute>
+        <xsl:element name="div">
+            BOO
+        </xsl:element>
+    </xsl:element>
+</xsl:template>
+</xsl:stylesheet>

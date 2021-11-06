@@ -1,0 +1,655 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>TST Editor</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<link rel="icon" type="image/png" href="favicon-32.png">
+<link rel="stylesheet" href="../lib/css/tufte.css">
+<link rel="stylesheet" href="lib/codemirror/lib/codemirror.css">
+<link rel="stylesheet" href="lib/codemirror/addon/hint/show-hint.css">
+<link rel="stylesheet" href="lib/codemirror/addon/lint/lint.css">
+<link rel="stylesheet" href="lib/vanillaSelectBox.css">
+
+<link rel="stylesheet" href="../lib/css/fonts.css">
+<link rel="stylesheet" href="../lib/css/tst.css">
+<link rel="stylesheet" href="../lib/css/header.css">
+<link rel="stylesheet" href="../lib/css/transcription.css">
+<link rel="stylesheet" href="style.css">
+
+<script src="lib/codemirror/lib/codemirror.js"></script>
+<script src="lib/codemirror/addon/mode/multiplex.js"></script>
+<script src="lib/codemirror/addon/hint/show-hint.js"></script>
+<script src="lib/codemirror/addon/hint/xml-hint.js"></script>
+<script src="lib/codemirror/addon/lint/htmlhint-custom.js"></script>
+<script src="lib/codemirror/addon/lint/lint.js"></script>
+<script src="lib/codemirror/addon/lint/xml-lint.js"></script>
+<script src="lib/codemirror/mode/xml/xml.js"></script>
+<script src="lib/codemirror/addon/display/placeholder.js"></script>
+<script src="lib/cmwrapper.js"></script>
+
+<script src="lib/vanillaSelectBox.js"></script>
+
+<script src="../lib/js/hypher-nojquery.js"></script>
+<script src="../lib/js/sa.js"></script>
+<script src="../lib/js/ta.js"></script>
+<script src="../lib/js/ta-Latn.js"></script>
+<script src="../lib/js/sanscript.js"></script>
+<script src="../lib/js/viewpos.js"></script>
+<script src="../lib/js/transliterate.js"></script>
+
+<script src="lib/localforage.min.js"></script>
+<script src="lib/FileSaver.min.js"></script>
+
+<script src="lib/he.js"></script>
+
+<script src="https://unpkg.com/mirador@latest"></script>
+<script src="../lib/js/tst.js"></script>
+<script src="script.js"></script>
+</head>
+
+<body lang="en">
+<div id="assets" style="position: absolute; visibility: hidden">
+<svg id="plusicon" height='32px' width='32px' xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" version="1.1" x="0px" y="0px" viewBox="0 0 100 100"><g transform="translate(0,-952.36218)"><path d="m 50,978.36217 c -2.7615,0 -5,2.2386 -5,5 l 0,14 -14,0 c -2.7614,0 -5,2.2385 -5,5.00003 0,2.7615 2.2386,5 5,5 l 14,0 0,14 c 0,2.7614 2.2385,5 5,5 2.7615,0 5,-2.2386 5,-5 l 0,-14 14,0 c 2.7614,0 5,-2.2385 5,-5 0,-2.76153 -2.2386,-5.00003 -5,-5.00003 l -14,0 0,-14 c 0,-2.7614 -2.2385,-5 -5,-5 z" style="text-indent:0;text-transform:none;direction:ltr;block-progression:tb;baseline-shift:baseline;enable-background:accumulate;" fill-opacity="1" stroke="none" marker="none" display="inline" overflow="visible"></path></g></svg>
+<!--svg id="trash" enable-background="new 0 0 32 32" height="32px" id="Layer_1" version="1.1" viewBox="0 0 32 32" width="32px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="trash"><path clip-rule="evenodd" d="M29.98,6.819c-0.096-1.57-1.387-2.816-2.98-2.816h-3v-1V3.001   c0-1.657-1.344-3-3-3H11c-1.657,0-3,1.343-3,3v0.001v1H5c-1.595,0-2.885,1.246-2.981,2.816H2v1.183v1c0,1.104,0.896,2,2,2l0,0v17   c0,2.209,1.791,4,4,4h16c2.209,0,4-1.791,4-4v-17l0,0c1.104,0,2-0.896,2-2v-1V6.819H29.98z M10,3.002c0-0.553,0.447-1,1-1h10   c0.553,0,1,0.447,1,1v1H10V3.002z M26,28.002c0,1.102-0.898,2-2,2H8c-1.103,0-2-0.898-2-2v-17h20V28.002z M28,8.001v1H4v-1V7.002   c0-0.553,0.447-1,1-1h22c0.553,0,1,0.447,1,1V8.001z" fill="#333333" fill-rule="evenodd"/><path clip-rule="evenodd" d="M9,28.006h2c0.553,0,1-0.447,1-1v-13c0-0.553-0.447-1-1-1H9   c-0.553,0-1,0.447-1,1v13C8,27.559,8.447,28.006,9,28.006z M9,14.005h2v13H9V14.005z" fill="#333333" fill-rule="evenodd"/><path clip-rule="evenodd" d="M15,28.006h2c0.553,0,1-0.447,1-1v-13c0-0.553-0.447-1-1-1h-2   c-0.553,0-1,0.447-1,1v13C14,27.559,14.447,28.006,15,28.006z M15,14.005h2v13h-2V14.005z" fill="#333333" fill-rule="evenodd"/><path clip-rule="evenodd" d="M21,28.006h2c0.553,0,1-0.447,1-1v-13c0-0.553-0.447-1-1-1h-2   c-0.553,0-1,0.447-1,1v13C20,27.559,20.447,28.006,21,28.006z M21,14.005h2v13h-2V14.005z" fill="#333333" fill-rule="evenodd"/></g></svg-->
+<svg id="closeicon" height="32px" width="32px" fill="#333333" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" version="1.1" style="shape-rendering:geometricPrecision;text-rendering:geometricPrecision;image-rendering:optimizeQuality;" viewBox="0 0 847 847" x="0px" y="0px" fill-rule="evenodd" clip-rule="evenodd">
+<g><path class="fil0" d="M423 272l217 -217c99,-99 251,53 151,152l-216 216 216 217c100,99 -52,251 -151,151l-217 -216 -216 216c-99,100 -251,-52 -152,-151l217 -217 -217 -216c-99,-99 53,-251 152,-152l216 217z"/></g></svg>
+<svg id="upicon" height="32px" width="32px" fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" x="0px" y="0px"><g data-name="4 Up"><path d="M42.38,24.38a6,6,0,0,1-8.48,0L30,20.48V42a6,6,0,0,1-12,0V20.48l-3.9,3.9A6,6,0,0,1,5.62,15.9L19.76,1.75A5.54,5.54,0,0,1,20.67,1c.12-.08.24-.14.36-.21l.21-.11a3.42,3.42,0,0,1,.47-.23A3,3,0,0,1,22.19.3l.24-.07a1.9,1.9,0,0,1,.39-.11,5.81,5.81,0,0,1,2.35,0,2.45,2.45,0,0,1,.41.11l.23.07a2.7,2.7,0,0,1,.48.16,3.42,3.42,0,0,1,.47.23L27,.81a3.24,3.24,0,0,1,.36.2,5.12,5.12,0,0,1,.91.75L42.38,15.9A6,6,0,0,1,42.38,24.38Z"/></g></svg>
+<svg id="downicon" height="32px" width="32px" fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" x="0px" y="0px"><g data-name="1 Down"><path d="M44.14,27.86a5.93,5.93,0,0,1-1.76,4.24L28.24,46.24a5.5,5.5,0,0,1-.91.75,3.24,3.24,0,0,1-.36.2l-.21.12-.46.23a3.49,3.49,0,0,1-.49.16l-.23.07-.41.11a5.76,5.76,0,0,1-2.34,0l-.41-.11-.23-.07a3.86,3.86,0,0,1-.48-.16,3.42,3.42,0,0,1-.47-.23L21,47.19a3.24,3.24,0,0,1-.36-.2,5.5,5.5,0,0,1-.91-.75L5.62,32.1a6,6,0,1,1,8.48-8.48L18,27.51V6A6,6,0,0,1,30,6V27.51l3.9-3.89a6,6,0,0,1,10.24,4.24Z"/></g></svg>
+</div>
+<div id="headerviewer" class="recordcontainer">
+</div>
+
+<div id="headereditor" class="recordcontainer">
+<div class="record-editor">
+<header></header>
+<article>
+<section>
+    <div>
+        <label for="hd_shelfmark">Shelfmark</label>
+        <input autocomplete="off" type="text" id="hd_shelfmark" name="shelfmark" data-select="teiHeader > fileDesc > sourceDesc > msDesc > msIdentifier > idno[type='shelfmark']" required placeholder="Indien XX">
+    </div>
+    <div>
+        <label for="hd_repository">Repository</label>
+        <input required autocomplete="off" type="text" id="hd_repository" name="repository" data-select="teiHeader > fileDesc > sourceDesc > msDesc > msIdentifier > repository > orgName">
+    </div>
+    <div>
+        <label for="hd_other_identifiers">Other identifiers</label>
+        <div class="multiple" data-select="teiHeader > fileDesc > sourceDesc > msDesc > msIdentifier > idno[type='alternate'] > idno">
+            <div class="multi-item">
+                <div>
+                    <input autocomplete="off" type="text" name="other_identifier" data-subselect=":scope" placeholder="Tamoul XX">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <label for="hd_title">Document Title</label>
+        <textarea autocomplete="off" id="hd_title" name="title" data-select="teiHeader > fileDesc > titleStmt > title" data-schema="descriptive names" rows="1" required placeholder="title of document"></textarea>
+    </div>
+    <div>
+        <label for="hd_titleStmt_editor">Researcher</label>
+        <div class="multiple" data-select="teiHeader > fileDesc > titleStmt > editor">
+            <div class="multi-item">
+                <div>
+                    <label>Name</label>
+                    <input autocomplete="name" type="text" name="researcher_name" data-subselect="persName" required>
+                </div>
+                <div>
+                    <label>Affiliation</label>
+                    <input autocomplete="organization" type="text" name="researcher_affiliation" data-subselect="orgName" required>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <label for="hd_publisher">Publisher</label>
+        <input autocomplete="off" type="text" id="hd_publisher" name="publisher" data-select="teiHeader > fileDesc > publicationStmt > publisher" value="TST Project" readonly>
+        <label for="hd_publish_date">Publication date</label>
+        <input autocomplete="off" type="text" id="hd_publish_date" name="publish_date" data-select="teiHeader > fileDesc > publicationStmt > date" value="2021" readonly>
+    </div>
+    <div>
+        <label for="hd_facsimile">IIIF manifest</label>
+        <input autocomplete="off" type="url" id="hd_facsimile" name="facsimile" data-select="facsimile > graphic" data-attr="url" data-tip="URL of the IIIF manifest for the digital images." placeholder="https://..." pattern="https://.*(\.json|/manifest)">
+        <label for="hd_facsimile_start">Start image</label>
+        <input autocomplete="off" type="number" step="1" min="0" id="hd_facsimile_start" name="facsimile_start" data-select="facsimile > graphic" data-attr="facs" data-tip="Number of the first image to display, starting from 1.">
+    </div>
+    <div>
+        <label for="hd_summary">Summary</label>
+        <textarea autocomplete="off" rows="10" id="hd_summary" name="summary" data-select="teiHeader > fileDesc > sourceDesc > msDesc > msContents > summary" data-schema="descriptive names" placeholder="Summary description of the document" required></textarea>
+    </div>
+  </section>
+  <section>
+    <h3>Physical description</h3>
+    <div>
+        <label for="hd_MS_type">Type</label>
+        <select autocomplete="off" id="hd_MS_type" name="MS_type" data-select="teiHeader > fileDesc > sourceDesc > msDesc > msContents" data-attr="class" data-list="mstypes" required></select>
+        <label for="hd_format">Format</label>
+        <select autocomplete="off" id="hd_format" name="format" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc" data-attr="form" data-list="format" required></select>
+        <label for="hd_stringholes">Stringholes</label>
+        <input autocomplete="off" type="number" step="1" min="0" id="hd_stringholes" name="stringholes" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > support > measure[unit='stringhole']" data-attr="quantity">
+    </div>
+    <div>
+        <label for="hd_material">Material</label>
+        <select autocomplete="off" id="hd_material" name="material" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc" data-attr="material" data-list="materials" required>
+        </select>
+        <textarea autocomplete="off" rows="2" name="support_p" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > support > p" data-schema="descriptive" placeholder="Further details about the support material"></textarea> 
+    </div>
+    <div>
+        <label for="hd_extent_quantity" title="Give the full extent, including blank folios. In the description, you may be more specific.">Extent</label>
+        <input autocomplete="off" type="number" step="1" min="1" id="hd_extent_quantity" name="extent_quantity" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > measure" data-attr="quantity"  data-tip="Give the full extent, including blank folios." required>
+        <select autocomplete="off" name="extent_unit" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > measure" data-attr="unit" data-list="extentunit" required></select>
+        <textarea autocomplete="off" rows="2" name="hd_extent" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > measure" data-schema="descriptive_restricted" placeholder="X guard folios, XX numbered folios, X blank folios"></textarea>
+        
+    </div>
+    <div>
+        <label title="Size of the object, including the cover.">Overall size</label>
+        <div>
+            <input autocomplete="off" type="text" step="any" name="object_unit" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='object']" data-attr="unit" hidden readonly value="mm">
+            <label for="hd_object_width">Width</label>
+            <input autocomplete="off" type="number" step="any" min="0" id="hd_object_width" name="width" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='object'] > width" data-attr="quantity" data-tip="Width of the object, including cover.">
+            <label>mm</label>
+        </div>
+        <div>
+            <label for="hd_object_height">Height</label>
+            <input autocomplete="off" type="number" step="any" min="0" id="hd_object_height" name="height" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='object'] > height" data-attr="quantity" data-tip="Height of the object, including cover.">
+            <label>mm</label>
+        </div>
+        <div>
+            <label for="hd_object_depth">Depth</label>
+            <input autocomplete="off" type="number" step="any" min="0" id="hd_object_depth" name="depth" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='object'] > depth" data-attr="quantity" data-tip="Depth of the object, including cover.">
+            <label>mm</label>
+        </div>
+    </div>
+    <div>
+        <label title="Dimensions of a single leaf.">Leaf size</label>
+        <div class="rowpar">
+            <div class="subrow">
+                <div>
+                    <input autocomplete="off" type="text" id="hd_leaf_unit" name="unit" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='leaf']" data-attr="unit" hidden readonly value="mm">
+                    <label for="hd_leaf_width">Width</label>
+                    <input autocomplete="off" type="number" step="any" min="0" id="hd_leaf_width" name="width" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='leaf'] > width" data-attr="quantity">
+                    <label>mm</label>
+                </div>
+                <div>
+                    <label for="hd_leaf_width_min">Min</label>
+                    <input autocomplete="off" type="number" step="any" min="0" id="hd_leaf_width_min" name="width" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='leaf'] > width" data-attr="min">
+                    <label>mm</label>
+                </div>
+                <div>
+                    <label for="hd_leaf_width_max">Max</label>
+                    <input autocomplete="off" type="number" step="any" min="0" id="hd_leaf_width_max" name="width" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='leaf'] > width" data-attr="max">
+                    <label>mm</label> 
+                </div>
+            </div>
+            <div style="flex-basis: 100%; height:0"></div>
+            <div class="subrow">
+                <div>
+                    <label for="hd_leaf_height">Height</label>
+                    <input autocomplete="off" type="number" step="any" min="0" id="hd_leaf_height" name="height" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='leaf'] > height" data-attr="quantity">
+                    <label>mm</label>
+                </div>
+                <div>
+                    <label for="hd_leaf_height_min">Min</label>
+                    <input autocomplete="off" type="number" step="any" min="0" id="hd_leaf_height_min" name="heightmin" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='leaf'] > height" data-attr="min">
+                    <label>mm</label>
+                </div>
+                <div>
+                    <label for="hd_leaf_height_max">Max</label>
+                    <input autocomplete="off" type="number" step="any" min="0" id="hd_leaf_height_max" name="height" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='leaf'] > height" data-attr="max">
+                    <label>mm</label> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <span title="Dimensions of the written area of the leaf.">Written area</span>
+        <div class="rowpar">
+            <div class="subrow">
+                <div>
+                    <input autocomplete="off" type="text" id="hd_written_unit" name="unit" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='written']" data-attr="unit" hidden readonly value="mm">
+                    <label for="hd_written_width">Width</label>
+                    <input autocomplete="off" type="number" step="any" min="0" id="hd_written_width" name="width" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='written'] > width" data-attr="quantity">
+                    <label>mm</label>
+                </div>
+                <div>
+                    <label for="hd_written_width_min">Min</label>
+                    <input autocomplete="off" type="number" step="any" min="0" id="hd_written_width_min" name="widthmin" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='written'] > width" data-attr="min">
+                    <label>mm</label>
+                </div>
+                <div>
+                    <label for="hd_written_width_max">Max</label>
+                    <input autocomplete="off" type="number" step="any" min="0" id="hd_written_width_max" name="widthmax" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='written'] > width" data-attr="max">
+                    <label>mm</label> 
+                </div>
+            </div>
+            <div style="flex-basis: 100%; height:0"></div>
+            <div class="subrow">
+                <div>
+                    <label for="hd_written_height">Height</label>
+                    <input autocomplete="off" type="number" step="any" min="0" id="hd_written_height" name="height" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='written'] > height" data-attr="quantity">
+                    <label>mm</label>
+                </div>
+                <div>
+                    <label for="hd_written_height_min">Min</label>
+                    <input autocomplete="off" type="number" step="any" min="0" id="hd_written_height_min" name="heightmin" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='written'] > height" data-attr="min">
+                    <label>mm</label>
+                </div>
+                <div>
+                    <label for="hd_written_height_max">Max</label>
+                    <input autocomplete="off" type="number" step="any" min="0" id="hd_written_height_max" name="heightmax" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > extent > dimensions[type='written'] > height" data-attr="max">
+                    <label>mm</label> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <label for="hd_columns" title="One number, or two numbers separated by a space for a range.">Columns</label>
+        <input autocomplete="off" type="text" id="hd_columns" name="columns" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > layoutDesc > layout" data-attr="columns" placeholder="1" pattern="\d+\s*\d*" size="8">
+        <label for="hd_writtenLines" title="One number, or two numbers separated by a space for a range.">Lines per page (written)</label>
+        <input autocomplete="off" type="text" id="hd_writtenLines" name="writtenLines" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > layoutDesc > layout" data-attr="writtenLines" placeholder="XX or XX XX" pattern="\d+\s*\d*" size="8"> 
+        <label for="hd_ruledLines" title="One number, or two numbers separated by a space for a range.">Lines per page (ruled)</label>
+        <input autocomplete="off" type="text" id="hd_ruledLines" name="ruledLines" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > layoutDesc > layout" data-attr="ruledLines" placeholder="XX or XX XX" pattern="\d+\s*\d*" size="8"> 
+    </div>
+    <div>
+        <label for="hd_layout_style">Style</label>
+        <select autocomplete="off" id="hd_layout_style" name="style" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > layoutDesc > layout" data-attr="style" data-list="style">
+            <option value="" selected></option>
+        </select>
+        <label for="hd_streams" title="Number of textual streams per page">Streams</label>
+        <input autocomplete="off" type="text" id="hd_streams" name="streams" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > layoutDesc > layout" data-attr="streams" placeholder="1" pattern="\d+\s*\d*" size="8" data-tip="Number of textual streams per page. For example, a tripāṭha manuscript, with mūla and commentary, has two streams.">
+    </div>
+    <div>
+        <label for="hd_layout">Layout</label>
+        <textarea autocomplete="off" rows="2" id="hd_layout" name="layout" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > layoutDesc > layout" data-schema="descriptive" placeholder="Further notes on the layout of the document"></textarea>
+    </div><div>
+        <label for="hd_condition">Condition</label>
+        <textarea autocomplete="off" rows="2" id="hd_condition" name="condition" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > condition" data-schema="descriptive" placeholder="Very good state of preservation, in spite of bore holes caused by insects."></textarea>
+    </div>
+    <div>
+        <label for="hd_binding">Binding</label>
+        <textarea autocomplete="off" rows="2" id="hd_binding" name="binding" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > bindingDesc > binding > p" data-schema="descriptive" placeholder="Description of binding, cover, etc."></textarea>
+    </div>
+    
+    <h4>Foliation</h4>
+    <div class="multiple" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > foliation">
+        <div class="multi-item">
+            <div>
+            <textarea autocomplete="off" rows="4" name="foliation" data-subselect=":scope" data-schema="descriptive" placeholder="E.g., Tamil letter-numerals, left margin."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <h4>Collation (Codicological units)</h4>
+    <div class="multiple" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > objectDesc > supportDesc > collation > desc">
+        <div class="multi-item">
+            <div>
+                <label title="A unique identifier. No spaces.">Unit ID</label>
+                <input autocomplete="off" type="text" name="collation_id" data-subattr="xml:id" placeholder="U1" pattern="[^\s]+" data-tip="A unique identifier. No spaces."></input>
+            </div>
+            <div>
+            <textarea autocomplete="off" rows="4" name="collation" data-subselect=":scope" data-schema="descriptive" placeholder="Description of how the leaves are arranged."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <h4>Scribal hands</h4>
+    <div class="multiple" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > handDesc > handNote">
+        <div class="multi-item">
+            <div>
+                <label title="As defined in the 'Collation' section.">Codicological unit(s)</label>
+                <select autocomplete="off" name="hand_collation_id" data-subattr="synch" data-from="collation_id" data-prefix="#" class="multiselect" multiple></select>
+                <!--input type="text" data-subattr="n" placeholder="U1 U2"-->
+                <label>Scope</label>
+                <select autocomplete="off" name="handNote_scope" data-subattr="scope"> 
+                    <option value="" selected disabled></option>
+                    <option value="sole">sole</option>
+                    <option value="major">major</option>
+                    <option value="minor">minor</option>
+                </select>
+                <label>Scribe</label>
+                <select autocomplete="off" name="handNote_scribeRef" data-subattr="scribeRef" data-list="scribes">
+                    <option value="" selected></option>
+                </select>
+            </div>
+            <div>
+                <label>Script</label>
+                <select autocomplete="off" name="handNote_script" class="multiselect" data-subattr="script" multiple>
+                    <option value="arabic">Arabic</option>
+                    <option value="bengali">Bengali</option>
+                    <option value="devanagari">Devanagari</option>
+                    <option value="grantha">Grantha</option>
+                    <option value="latin">Latin</option>
+                    <option value="malayalam">Malayalam</option>
+                    <option value="nandinagari">Nandinagari</option>
+                    <option value="newa">Newa</option>
+                    <option value="pala">Pala</option>
+                    <option value="sarada">Sarada</option>
+                    <option value="sinhalese">Sinhalese</option>
+                    <option value="telugu">Telugu</option>
+                    <option value="tamil">Tamil</option>
+                </select>
+                <label>Features</label>
+                <select autocomplete="off" name="handNote_scriptRef" class="multiselect" data-subattr="scriptRef" data-list="scriptRef" multiple></select>
+                <label>Medium</label>
+                <select autocomplete="off" name="handNote_medium" class="multiselect" data-subattr="medium" data-list="media" multiple></select>
+            </div>
+            <div>
+                <textarea autocomplete="off" name="handNote_desc" rows="4" data-subselect="desc" data-schema="descriptive names" placeholder="Description of hand"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <h4>Decorations &amp; Illustrations</h4>
+    <div class="multiple" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > decoDesc > decoNote">
+        <div class="multi-item">
+            <div>
+                <label title="As defined in the 'Collation' section.">Codicological unit(s)</label>
+                <select autocomplete="off" data-subattr="synch" data-from="collation_id" data-prefix="#" class="multiselect" multiple></select>
+                <label title="As defined in the 'Contents' section">Textual unit</label>
+                <select autocomplete="off" data-subattr="corresp" name="text_corresp" data-from="text_id" data-prefix="#"></select>
+            </div>
+            <div>
+                <label>Type</label>
+                <select autocomplete="off" data-subattr="type" data-list="decotype" name="decoNote_type">
+                    <option value="" selected disabled></option>
+                </select>
+                <label>Placement</label>
+                <select autocomplete="off" data-subattr="subtype" data-list="subtype" name="decoNote_subtype" class="multiselect" multiple></select>
+            </div>
+            <div>
+                <textarea autocomplete="off" rows="4" name="decoNote_desc" data-subselect="desc" data-schema="descriptive" placeholder="Description of decoration"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <h4>Paratexts</h4>
+    <p>For examples, see <a href="https://tst.hypotheses.org/paratexts">https://tst.hypotheses.org/paratexts</a>.</p>
+    <div class="multiple" data-select="teiHeader > fileDesc > sourceDesc > msDesc > physDesc > additions > desc">
+        <div class="multi-item">
+            <div>
+                <label title="As defined in the 'Collation' section.">Codicological unit(s)</label>
+                <select autocomplete="off" data-subattr="synch" data-from="collation_id" data-prefix="#" class="multiselect" multiple></select>
+                <label title="As defined in the 'Contents' section">Textual unit</label>
+                <select autocomplete="off" data-subattr="corresp" name="text_corresp" data-from="text_id" data-prefix="#"></select>
+            </div>
+            <div>
+                <label>Type</label>
+                <select autocomplete="off" data-subattr="type" name="addition_type" class="multiselect" multiple>
+                    <optgroup label="structuring">
+                        <option value="catchword">catchword</option>
+                        <option value="chapter-heading">chapter heading</option>
+                        <option value="end-title">end title</option>
+                        <option value="heading">heading</option>
+                        <option value="intertitle">intertitle</option>
+                        <option value="register">register (index, glossary)</option>
+                        <option value="table-of-contents">table of contents</option>
+                        <option value="title">title</option>
+                        <option value="verse-beginning">verse beginning</option>
+                        <option value="verse-numbering">verse numbering</option>
+                    </optgroup>
+                    <optgroup label="commenting">
+                        <option value="correction">correction</option>
+                        <option value="gloss">gloss/commentary</option>
+                        <option value="commenting-note">text-related note</option>
+                    </optgroup>
+                    <optgroup label="documenting">
+                        <option value="blessing">blessing/benediction</option>
+                        <option value="completion-statement">completion statement</option>
+                        <option value="dedication">dedication</option>
+                        <option value="ex-libris">ex-libris</option>
+                        <option value="invocation">invocation</option>
+                        <option value="ownership-statement">ownership statement</option>
+                        <option value="postface">postface</option>
+                        <option value="preface">preface</option>
+                        <option value="satellite-stanza">satellite stanza</option>
+                        <option value="seal">seal</option>
+                        <option value="shelfmark">shelfmark</option>
+                        <option value="stamp">stamp</option>
+                        <option value="total-chapters">total chapters</option>
+                        <option value="total-stanzas">total stanzas</option>
+                        <option value="documenting-note">user-related note</option>
+                    </optgroup>
+                </select>
+                <label>Placement</label>
+                <select autocomplete="off" data-subattr="subtype" name="addition_subtype" class="multiselect" multiple>
+                    <option value="back">back</option>
+                    <option value="beginning">beginning</option>
+                    <option value="cover">cover</option>
+                    <option value="detached">detached</option>
+                    <option value="end">end</option>
+                    <option value="flyleaf">flyleaf</option>
+                    <option value="front">front</option>
+                    <option value="guard-folio">guard folio</option>
+                    <option value="inserted">inserted</option>
+                    <option value="intertextual">intertextual</option>
+                    <option value="marginal">marginal</option>
+                    <option value="spine">spine</option>
+                    <option value="title-page">title page</option>
+                    <optgroup label="position">
+                        <option value="top">top</option>
+                        <option value="bottom">bottom</option>
+                        <option value="left">left</option>
+                        <option value="right">right</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div>
+                <textarea autocomplete="off" name="additions_desc" rows="4" class="big" data-subselect=":scope" data-schema="transcription descriptive names" placeholder="Marginalia, running titles, satellite stanzas, etc."></textarea>
+            </div>
+        </div>
+    </div>
+    </section>
+    <section>
+    <h3>Contents</h3>
+    <div class="multiple" data-select="teiHeader > fileDesc > sourceDesc > msDesc > msContents > msItem">
+        <div class="multi-item">
+            <div>
+                <div>
+                    <label title="As defined in the 'Collation' section.">Codicological unit(s)</label>
+                    <select autocomplete="off" data-subattr="synch" data-from="collation_id" data-prefix="#" class="multiselect" multiple></select>
+                </div>
+                <div>
+                <label title="A unique identifier. No spaces.">Text ID</label>
+                <input autocomplete="off" type="text" name="text_id" data-subattr="xml:id" placeholder="T1" pattern="[^\s]+" data-tip="A unique identifier. No spaces.">
+                </div>
+                <select autocomplete="off" data-subattr="defective" style="flex-grow: 0.5" required>
+                    <option value="false">complete</option>
+                    <option value="true">incomplete</option>
+                </select>
+            </div>
+            <div>
+                <label>Title</label>
+                <textarea autocomplete="off" rows="1" name="text_title" data-subselect="title" data-schema="descriptive" placeholder="title of text" required></textarea>
+            </div>
+            <div>
+                <label>Genre</label>
+                <select autocomplete="off" class="multiselect" name="msItem_genre" data-subattr="class" data-list="genres" multiple></select>
+            </div>
+            <div>
+                <label>Author</label>
+                <textarea autocomplete="off" rows="1" name="text_author" data-subselect="author" data-schema="descriptive" placeholder="author of text"></textarea>
+            </div>
+            <div>
+                <label>Main language</label>
+                <select autocomplete="off" data-subselect="textLang" data-subattr="mainLang" data-list="langs">
+                    <option value="" selected disabled></option>
+                </select>
+                <label>Other languages</label>
+                <select autocomplete="off" class="multiselect" name="msItem_otherLangs" data-subselect="textLang" data-subattr="otherLangs" data-list="langs" multiple></select>
+            </div>
+            <div>
+                <label>Other manuscript testimonies</label>
+                <textarea autocomplete="off" rows="3" name="filiation" data-subselect="filiation > p" data-schema="descriptive names" placeholder="Other manuscripts containing this text"></textarea>
+            </div>
+            <div>
+                <label>Rubric/ Namaskāra</label>
+                <div class="multiple w89" data-subselect="rubric">
+                    <div class="multi-item">
+                        <textarea autocomplete="off" name="msItem_rubric" rows="4" class="big" data-schema="transcription" data-subselect=":scope"></textarea>
+                    </div>
+                </div>
+                <!--textarea autocomplete="off" name="msItem_rubric" rows="4" class="big" data-schema="transcription" data-subselect="rubric"></textarea-->
+            </div>
+            <div>
+                <label title="Beginning of the text, excluding the rubric.">Incipit</label>
+                <div class="multiple w89" data-subselect="incipit">
+                    <div class="multi-item">
+                        <textarea autocomplete="off" rows="4" name="msItem_incipit" class="big" data-schema="transcription" data-subselect=":scope"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label title="End of the text, excluding the completion statement and the colophon.">Explicit</label>
+                <div class="multiple w89" data-subselect="explicit">
+                    <div class="multi-item">
+                        <textarea autocomplete="off" rows="4" name="msItem_explicit" class="big" data-schema="transcription" data-subselect=":scope"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label title="TEI finalRubric">Completion statement</label>
+                <div class="multiple w89" data-subselect="finalRubric">
+                    <div class="multi-item">
+                        <textarea autocomplete="off" rows="4" name="msItem_completion_statement" class="big" data-schema="transcription" data-subselect=":scope"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label>Colophon</label>
+                <div class="multiple w89" data-subselect="colophon">
+                    <div class="multi-item">
+                        <textarea autocomplete="off" rows="4" class="big" name="msItem_colophon" data-schema="transcription" data-subselect=":scope"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <h4>Import part/volume</h4>
+    <div class="multiple file" data-select="teiHeader > fileDesc > sourceDesc > msDesc > msPart">
+        <div class="multi-item">
+            <textarea autocomplete="off" type="text" name="msPart" class="noCodeMirror nosanitize" data-subselect=":scope" hidden readonly></textarea>
+            <p class="msPart_cote" data-fixed-select="msIdentifier > idno[type='cote']"></p>
+            <p class="msPart_head" data-fixed-select="head"></p>
+            <p class="msPart_cunit" data-fixed-name="collation_id" data-fixed-multiselect="collation > desc" data-fixed-attr="xml:id" style="display: none"></p>
+            <p class="msPart_tunit" data-fixed-name="text_id" data-fixed-multiselect="msItem" data-fixed-attr="xml:id" style="display: none"></p>
+
+            <input class="hd_msPart" name="msPart_file" autocomplete="off" type="file" name="msPart" accept=".xml">
+        </div>
+    </div>
+    </section>
+    <section>
+    <h3>History</h3>
+    <div>
+        <div>
+            <input autocomplete="off" type="text" step="any" name="calendar" data-select="teiHeader > fileDesc > sourceDesc > msDesc > history > origin > origDate" data-attr="calendar" hidden readonly value="gregorian">
+            <label for="hd_origDate_when">Date</label>
+            <input autocomplete="off" type="number" step="any" min="0" id="hd_origDate_when" name="origDate_when" data-select="teiHeader > fileDesc > sourceDesc > msDesc > history > origin > origDate" data-attr="when" data-tip="Year in the Gregorian calendar.">
+        </div>
+        <div>
+            <label for="hd_origDate_notBefore">Not before</label>
+            <input autocomplete="off" type="number" step="any" min="0" id="hd_origDate_notBefore" name="origDate_notBefore" data-select="teiHeader > fileDesc > sourceDesc > msDesc > history > origin > origDate" data-attr="notBefore">
+        </div>
+        <div>
+            <label for="hd_origDate_notAfter">Not after</label>
+            <input autocomplete="off" type="number" step="any" min="0" id="hd_origDate_notAfter" name="origDate_notAfter" data-select="teiHeader > fileDesc > sourceDesc > msDesc > history > origin > origDate" data-attr="notAfter">
+        </div>
+    </div>
+    <div>
+        <textarea autocomplete="off" rows="3" name="origDate" data-select="teiHeader > fileDesc > sourceDesc > msDesc > history > origin > origDate" data-schema="descriptive names" placeholder="Description of date, dating source/methodology, etc."></textarea>
+    </div>
+    <div>
+        <label for="hd_origPlace">Place of origin</label>
+        <input autocomplete="off" type="text" rows="1" id="hd_origPlace" name="origPlace" data-select="teiHeader > fileDesc > sourceDesc > msDesc > history > origin > origPlace" placeholder="Tamilnadu">
+    </div>
+    <div>
+        <label for="hd_provenance">Provenance</label>
+        <textarea autocomplete="off" rows="3" id="hd_provenance" name="provenance" data-select="teiHeader > fileDesc > sourceDesc > msDesc > history > provenance > p" data-schema="descriptive names" placeholder="History of the object between creation and acquisition"></textarea>
+    </div>
+    <div>
+        <label for="hd_acquisition">Acquisition</label>
+        <textarea autocomplete="off" rows="3" id="hd_acquisition" name="acquisition" data-select="teiHeader > fileDesc > sourceDesc > msDesc > history > acquisition > p" data-schema="descriptive names" placeholder="How the item was acquired by the repository"></textarea>
+    </div>
+    </section>
+    <section>
+    <h3>Bibliography</h3>
+    <div class="multiple" data-select="teiHeader > fileDesc > sourceDesc > msDesc > additional > listBibl > bibl">
+        <div class="multi-item">
+            <div>
+                <textarea autocomplete="off" rows="3" data-subselect=":scope" data-schema="descriptive" name="bibliography"></textarea>
+            </div>
+        </div>
+    </div>
+    
+    <h3>Transcription conventions</h3>
+    <div class="multiple" data-select="teiHeader > encodingDesc > p">
+        <div class="multi-item">
+            <div>
+            <textarea autocomplete="off" rows="6" name="encoding" data-subselect=":scope" data-schema="descriptive" placeholder="Transcription conventions, abbreviations, etc."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <h3>Revision history</h3>
+    <div class="multiple" data-select="teiHeader > revisionDesc > change">
+        <div class="multi-item">
+            <div>
+                <input autocomplete="off" type="month" step="any" data-subattr="when" size="8" placeholder="YYYY-MM" pattern="\d{4}-\d{2}">
+                <textarea autocomplete="off" rows="4" name="change" data-subselect=":scope" data-schema="names" placeholder="summary of changes"></textarea>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h3>Text transcription</h3>
+    <div class="multiple" data-select="text">
+        <div class="multi-item">
+            <div>
+                <div>
+                    <label title="As defined in the 'Collation' section.">Codicological unit(s)</label>
+                    <select autocomplete="off" class="multiselect" data-subattr="synch" name="transcr_n" data-from="collation_id" data-prefix="#" multiple></select>
+                </div>
+                <div>
+                    <label title="As defined in the 'Contents' section">Textual unit</label>
+                    <select autocomplete="off" data-subattr="corresp" name="text_corresp" data-from="text_id" data-prefix="#"></select>
+                </div>
+            </div>
+            <div>
+            <textarea autocomplete="off" rows="10" name="text" data-subselect=":scope" data-schema="transcription" placeholder="text transcription"></textarea>
+            </div>
+        </div>
+    </div>
+</section>
+</article>
+
+<footer>
+    <div id="footermessage"></div>
+    <div class="buttoncontainer row">
+        <button type="button" id="updateheader" title="preview record">preview</button>
+        <button type="button" id="savedraft" title="download TEI XML file">save draft</button>
+        <!--button type="button" id="cancelheader">cancel</button-->
+    </div>
+</footer>
+
+</div><!-- .record-editor -->
+</div><!-- #headereditor -->
+<div id="viewertoggle" title="hide images">&lt;</div>
+<div id="editorviewer"></div>
+
+<form id="openform">
+    <div style="font-size: 1.2rem">
+        <div id="newfile">new file</div>
+        <div id="openfile"><label for="file">open file:</label> <input autocomplete="off" type="file" id="file" name="file" accept=".xml"/>
+        </div>
+        <div id="autosavebox">
+            <hr>
+            <h4>Autosaved in your browser</h4>
+            <div id="autosaveentries"></div>
+        </div>
+    </div>
+</form>
+</body>
+</html>
