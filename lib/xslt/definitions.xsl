@@ -34,6 +34,7 @@
     <tst:entry selected="true" key="palm-leaf">Palm leaf</tst:entry>
     <tst:entry key="palm-leaf talipot">Palm leaf (talipot)</tst:entry>
     <tst:entry key="palm-leaf palmyra">Palm leaf (palmyra)</tst:entry>
+    <tst:entry key="parchment">Parchment</tst:entry>
     <tst:entry key="birch-bark">Birch bark</tst:entry>
     <tst:entry key="copper">Copper</tst:entry>
     <tst:entry key="leather">Leather</tst:entry>
