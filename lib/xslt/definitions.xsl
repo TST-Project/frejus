@@ -22,7 +22,8 @@
 <tst:format>
     <tst:entry key="codex">codex</tst:entry>
     <tst:entry key="plate">plate</tst:entry>
-    <tst:entry key="pothi" selected="true">pothi</tst:entry>
+  <tst:entry key="strip">strip</tst:entry>
+  <tst:entry key="concertina">concertina</tst:entry>
     <tst:entry key="roll">roll</tst:entry>
 </tst:format>
 
